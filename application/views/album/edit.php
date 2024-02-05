@@ -19,10 +19,7 @@
                         <label for="deskripsi">Deskripsi</label>
                         <textarea class="form-control" id="deskripsi" name="deskripsi"><?php echo $album->deskripsi; ?></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="id_user">ID User</label>
-                        <input type="number" class="form-control" id="id_user" name="id_user" value="<?php echo $album->id_user; ?>" required>
-                    </div>
+
                     <div class="form-group">
                         <label for="cover">Cover</label>
                         <input type="file" class="form-control" id="cover" name="cover" accept="image/*">

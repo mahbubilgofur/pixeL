@@ -84,7 +84,6 @@
                         'nama_album' => $this->input->post('nama_album'),
                         'deskripsi' => $this->input->post('deskripsi'),
                         'tgl_buat' => date('Y-m-d H:i:s'), // Tanggal dibuat diisi dengan waktu sekarang
-                        'id_user' => $this->input->post('id_user'),
                         'cover' => $cover_path // Menyimpan nama file gambar ke dalam kolom cover
                     );
 
@@ -149,7 +148,6 @@
                     'nama_album' => $this->input->post('nama_album'),
                     'deskripsi' => $this->input->post('deskripsi'),
                     'tgl_buat' => date('Y-m-d H:i:s'), // Tanggal dibuat diisi dengan waktu sekarang
-                    'id_user' => $this->input->post('id_user'),
                     'cover' => $cover_path // Menyimpan nama file gambar ke dalam kolom cover
                 );
 

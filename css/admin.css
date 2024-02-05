@@ -34,13 +34,12 @@ body {
 	margin-bottom: 10px;
 }
 
-/* Content */
-/* .content {
+.content {
 	flex: 1;
 	padding: 20px;
 	margin-left: 192px;
 	background-color: rgb(255, 255, 255);
-} */
+}
 
 /* Responsive layout */
 @media only screen and (max-width: 768px) {

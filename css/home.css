@@ -5,7 +5,43 @@ body {
 	padding: 0;
 	font-family: Helvetica, Arial, sans-serif;
 }
-
+.none {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 80%;
+	height: 100%;
+}
+.kembali {
+	position: fixed;
+	top: 70px;
+	left: 10px;
+	background-color: black;
+	width: 40px;
+	border-radius: 20px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	color: white;
+	font-size: 25px;
+}
+.kembali-detail {
+	font-size: 25px;
+	position: fixed;
+	top: 70px;
+	left: 10px;
+	background-color: black;
+	width: 40px;
+	border-radius: 20px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	color: white;
+}
 header {
 	z-index: 1000;
 	background-color: #ffffff;
@@ -104,6 +140,7 @@ header {
 }
 
 .content-homes {
+	position: relative;
 	width: 100%;
 	min-height: 100vh;
 	display: flex;
@@ -113,6 +150,7 @@ header {
 	background-color: #ffffff;
 }
 .content {
+	position: relative;
 	margin-top: 70px;
 	width: 100%;
 	min-height: 100vh;
@@ -140,11 +178,9 @@ header {
 	margin-top: 70px;
 	width: 100%;
 	height: 85%;
-	background-color: rgb(255, 255, 255);
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	/* background-color: rgb(43, 87, 87); */
 }
 .l-homes {
 	display: flex;
@@ -337,6 +373,36 @@ header {
 	justify-content: center;
 	flex-wrap: wrap;
 }
+.tentang-pixel {
+	z-index: 1000;
+	position: fixed;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 100%;
+	bottom: 10px;
+	right: 10px;
+	background-color: black;
+}
+.tentang-pixel:hover {
+	transition: all 0.9s;
+	z-index: 1000;
+	position: fixed;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 100%;
+	bottom: 10px;
+	right: 10px;
+	background-color: rgba(42, 73, 82, 0.765);
+}
+.tentang-pixel p {
+	font-size: 20px;
+}
 .foto-cont {
 	display: flex;
 	justify-content: center;
@@ -412,22 +478,6 @@ header {
 	font-size: 15px;
 }
 
-@media screen and (max-width: 600px) {
-	/* Style adjustments for smaller screens */
-	header {
-		height: 90px;
-		flex-direction: column;
-		align-items: flex-start;
-	}
-
-	.logo {
-		margin-bottom: 10px;
-	}
-
-	.navigation {
-		margin-top: 10px;
-	}
-}
 a,
 .album,
 .foto {
@@ -532,6 +582,7 @@ a,
 /* batas */
 
 .c-content {
+	position: relative;
 	width: 100%;
 	height: 100vh;
 	display: flex;
@@ -1279,4 +1330,43 @@ halaman cari  */
 	.content-profil-cnt {
 		width: 100%;
 	}
+}
+
+/* halaman tentang */
+.tnt-cnt {
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgb(255, 255, 255);
+}
+.content-tnt {
+	margin-top: 50px;
+	width: 80%;
+	height: 80%;
+	background-color: #ffffff0b;
+	flex-direction: column;
+	display: flex;
+	justify-content: center;
+	text-align: justify;
+	align-items: center;
+	border-radius: 50px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.364);
+}
+.cnt-batas {
+	width: 80%;
+	height: 80%;
+	background-color: #ffffff0b;
+	flex-direction: column;
+	display: flex;
+	justify-content: start;
+	text-align: justify;
+	align-items: start;
+	border-radius: 50px;
+}
+.content-tnt h1,
+.content-tnt h3,
+.content-tnt p {
+	margin-top: 20px;
 }

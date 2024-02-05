@@ -10,15 +10,15 @@
 
     .upload_alb-b {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: center;
-        background-color: rgba(0, 0, 0, 0.218);
+        background-color: rgba(0, 0, 0, 0.672);
         flex-direction: column;
-        width: 500px;
+        width: 300px;
         height: 400px;
         padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        border-radius: 50px;
+        box-shadow: 0 0 10px rgb(0, 0, 0);
     }
 
     .upload_albb {
@@ -42,7 +42,6 @@
     }
 
     .atr {
-        margin-left: 40px;
         display: flex;
         width: 100%;
         justify-content: space-between;
@@ -53,7 +52,7 @@
         color: rgb(0, 155, 155);
         padding: 10px 15px;
         border: none;
-        border-radius: 4px;
+        border-radius: 20px;
         cursor: pointer;
         font-size: 16px;
     }
@@ -72,25 +71,29 @@
         color: rgb(0, 155, 155);
         margin-bottom: 5px;
         align-self: flex-start;
-        margin-left: 20px;
     }
 
     .form-input {
         width: 100%;
-        height: 30px;
+        height: 40px;
         margin-bottom: 15px;
-        border-radius: 4px;
-        margin-left: 40px;
+        border-radius: 20px;
+        border: 1px black;
+    }
+
+    .form-inputfile {
+        width: 100%;
+        height: 40px;
+        margin-bottom: 15px;
         border: 1px black;
     }
 
     .textarea-input {
         border: 1px black;
         width: 100%;
-        height: 60px;
+        height: 80px;
         margin-bottom: 15px;
-        border-radius: 4px;
-        margin-left: 40px;
+        border-radius: 20px;
     }
 
     .submit-btn {
@@ -98,7 +101,7 @@
         color: rgb(0, 155, 155);
         padding: 10px 15px;
         border: none;
-        border-radius: 4px;
+        border-radius: 20px;
         cursor: pointer;
         font-size: 16px;
     }
@@ -111,12 +114,11 @@
 </style>
 <div class="upload_alb">
     <div class="upload_alb-b">
-        <h2>Add Foto</h2>
         <?php echo validation_errors(); ?>
         <?php echo form_open_multipart('home/add_foto'); ?>
         <div class="upload_albb">
             <label for="judul_foto">Nama Album:</label>
-            <input type="text" name="judul_foto" class="form-input" required />
+            <input type="text" name="judul_foto" class="form-input" placeholder=" Isi Nama Album" />
             <label for="id_labum">Pilih Nama Album :</label>
             <select name="id_album" class="form-input" required>
                 <?php foreach ($data_album as $album) : ?>
@@ -128,7 +130,7 @@
             <textarea name="deskripsi_foto" class="textarea-input" required><?php echo set_value('deskripsi_foto'); ?></textarea>
             <label for="lokasi_file">Upload Foto:</label>
             <div class="type">
-                <input type="file" name="lokasi_file" class="form-input" required />
+                <input type="file" name="lokasi_file" class="form-inputfile" required />
                 <p>Maksimal Ukuran 1 MB</p>
             </div>
             <div class="atr">

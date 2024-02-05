@@ -1,5 +1,4 @@
 <div class="mid-profil">
-    <a href="<?= base_url('home/profil') ?>">Album</a>
     <a href="<?= base_url('home/profil_foto') ?>">Foto</a>
     <a href="<?= base_url('home/profil_like') ?>" class="likeee">Like</a>
 </div>

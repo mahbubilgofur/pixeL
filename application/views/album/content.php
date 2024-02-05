@@ -21,7 +21,6 @@
                     <td><?php echo $album->nama_album; ?></td>
                     <td><?php echo $album->deskripsi; ?></td>
                     <td><?php echo $album->tgl_buat; ?></td>
-                    <td><?php echo $album->id_user; ?></td>
                     <td>
                         <?php if (!empty($album->cover)) { ?>
                             <img src="<?= base_url('albums/' . $album->cover); ?>" alt="Cover" width="50" height="50">

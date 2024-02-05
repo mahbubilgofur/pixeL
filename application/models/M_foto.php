@@ -86,10 +86,9 @@ class M_foto extends CI_Model
             return array();
         }
     }
-    public function getAlbumsdanId_user($id_user)
+    public function getAlbumsdanId_user()
     {
         // Fetch album data from the database based on id_user
-        $this->db->where('id_user', $id_user);
         $query = $this->db->get('tbl_album'); // Ganti 'your_album_table_name' dengan nama tabel yang sesuai
 
         // Check if there are records

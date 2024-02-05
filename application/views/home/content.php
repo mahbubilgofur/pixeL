@@ -70,6 +70,11 @@
             </div>
         <?php endforeach; ?>
     </div>
+    <a href="<?= base_url('home/tentang') ?>">
+        <div class="tentang-pixel">
+            <p>❔</p>
+        </div>
+    </a>
 </div>
 </body>
 

@@ -26,6 +26,8 @@ class Home extends CI_Controller
         $this->load->model('M_foto');
         $this->load->model('M_like');
         $this->load->model('M_komentar');
+        $this->load->library('user_agent');
+        $this->load->helper('url');
     }
     public function index()
     {
@@ -34,6 +36,15 @@ class Home extends CI_Controller
         $DATA['albums'] = $this->M_album->getAlbums();
         $this->load->view('home/header', $DATA);
         $this->load->view('home/content', $DATA);
+    }
+    public function kembali()
+    {
+        redirect($this->agent->referrer());
+    }
+    public function tentang()
+    {
+        $this->load->view('home/header');
+        $this->load->view('home/tentang');
     }
     public function foto($id_album)
     {
@@ -159,20 +170,7 @@ class Home extends CI_Controller
         // Redirect kembali ke halaman foto atau halaman lain yang sesuai
         redirect('home/detail_foto/' . $id_foto); // Ganti dengan URL yang sesuai
     }
-    public function upload()
-    {
-        $this->load->view('home/header');
-        $this->load->view('home/upload');
-    }
-    public function upload_album()
-    {
-        if (!$this->session->userdata('role_id')) {
-            // Redirect to the login page or handle the case if the user is not logged in
-            redirect('login');
-        }
-        $this->load->view('home/header');
-        $this->load->view('home/upload_album');
-    }
+
     public function upload_foto()
     {
         // Check if the user is logged in
@@ -185,7 +183,7 @@ class Home extends CI_Controller
         $id_user = $this->session->userdata('id_user');
 
         // Fetch albums with joined foto data for the view based on id_user
-        $data['data_album'] = $this->M_foto->getAlbumsdanId_user($id_user);
+        $data['data_album'] = $this->M_foto->getAlbumsdanId_user();
 
         $this->load->view('home/header');
         $this->load->view('home/upload_foto', $data);
@@ -299,18 +297,7 @@ class Home extends CI_Controller
     }
 
 
-    public function profil()
-    {
-        if (!$this->session->userdata('role_id')) {
-            // Redirect to the login page or handle the case if the user is not logged in
-            redirect('login');
-        }
-        $id_user = $this->session->userdata('id_user');
-        $data['albums'] = $this->M_album->getIdalbumadnduser($id_user);
-        $this->load->view('home/header');
-        $this->load->view('home/profil', $data);
-        $this->load->view('home/content-profil', $data);
-    }
+
     public function profil_foto()
     {
         // Pastikan user sudah login dengan role_id tertentu
@@ -429,7 +416,7 @@ class Home extends CI_Controller
             $data['user'] = $this->M_user->getUserById($id);
 
             if (!$data['user']) {
-                // Handle if user is not found
+                // Han  dle if user is not found
                 show_404();
             }
 
@@ -438,90 +425,7 @@ class Home extends CI_Controller
         }
     }
 
-    public function edit_album()
-    {
-        if (!$this->session->userdata('role_id')) {
-            // Redirect to the login page or handle the case if the user is not logged in
-            redirect('login');
-        }
-        $id_user = $this->session->userdata('id_user');
-        $data['albums'] = $this->M_album->getIdalbumadnduser($id_user);
-        $this->load->view('home/header');
-        $this->load->view('home/content-edit-profil_album', $data);
-    }
 
-    public function delete_albums($id)
-    {
-        // Logic for deleting album
-        $this->M_album->deleteAlbum($id);
-
-        // Redirect or show success message
-        redirect('home/edit_album/' . $id);
-    }
-
-    public function edit_profil_albums($id)
-    {
-        $data['album'] = $this->M_album->getAlbumById($id);
-        $this->load->view('home/header');
-        $this->load->view('home/content-edit-alums-profil', $data);
-    }
-    public function update_albums($id)
-    {
-        // Form submission logic for updating album
-        if ($this->input->post()) {
-            // Konfigurasi upload gambaupdate_albumsr
-            $config['upload_path'] = './albums/';
-            $config['allowed_types'] = 'jpg|jpeg|png';
-            $config['max_size'] = 1024;
-
-            // Load library upload
-            $this->load->library('upload', $config);
-
-            // Retrieve album data
-            $album = $this->M_album->getAlbumById($id);
-
-            // Lakukan upload gambar jika ada
-            if ($this->upload->do_upload('cover')) {
-                // Hapus cover lama jika ada
-                $old_cover = $album->cover;
-                if (!empty($old_cover)) {
-                    unlink('./albums/' . $old_cover);
-                }
-
-                // Simpan cover yang baru diupload
-                $upload_data = $this->upload->data();
-                $cover_path = $upload_data['file_name'];
-            } else {
-                // Jika tidak ada upload baru, gunakan cover lama
-                $cover_path = $album->cover;
-            }
-
-            // Data album
-            $data = array(
-                'nama_album' => $this->input->post('nama_album'),
-                'deskripsi' => $this->input->post('deskripsi'),
-                'tgl_buat' => date('Y-m-d H:i:s'), // Tanggal dibuat diisi dengan waktu sekarang
-                'cover' => $cover_path // Menyimpan nama file gambar ke dalam kolom cover
-            );
-
-            // Memanggil model untuk mengupdate data album
-            $this->M_album->updateAlbum($id, $data);
-
-            // Redirect or show success message
-            redirect('home/edit_album');
-        } else {
-            // Load the edit view if no form submission
-            $data['album'] = $this->M_album->getAlbumById($id);
-
-            if (!$data['album']) {
-                // Handle if album is not found
-                show_404();
-            }
-
-            $this->load->view('home/header');
-            $this->load->view('home/content-edit-alums-profil', $data);
-        }
-    }
     public function edit_foto()
     {
         if (!$this->session->userdata('role_id')) {
