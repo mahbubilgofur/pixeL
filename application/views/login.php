@@ -12,7 +12,8 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(to right, #141e30, #243b55);
+            background-color: #6f84f1;
+            background-image: linear-gradient(90deg, #6f84f1 0%, #00fdd0 100%);
             color: #333;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -37,7 +38,25 @@
         }
 
         .form-group {
+            position: relative;
             margin-bottom: 15px;
+        }
+
+        .password-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .password-container a {
+            right: 5px;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            background-color: white;
+            border-radius: 0px 4px 4px 0px;
         }
 
         .form-group label {
@@ -48,6 +67,16 @@
         }
 
         .form-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-groupp input {
+            display: flex;
             width: 100%;
             padding: 10px;
             box-sizing: border-box;
@@ -111,8 +140,26 @@
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <div class="password-container">
+                <input type="password" id="password" name="password" required>
+                <a type="button" id="togglePassword">
+                    <img id="eyeIcon" src="<?= base_url('') ?>img/a3.png" alt="Show Password" style="width: 20px;">
+                </a>
+            </div>
         </div>
+
+        <script>
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordField = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+
+            togglePassword.addEventListener('click', function() {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                eyeIcon.src = type === 'password' ? 'img/a1.png' : 'img/a3.png';
+            });
+        </script>
+
         <a href="<?= base_url('/') ?>" class="kembali-L">Kembali</a>
         <button type="submit" class="login-button">Login</button>
 

@@ -1,7 +1,7 @@
 <!-- Content -->
 <div class="content">
     <h2>Table Content</h2>
-    <a href="<?= base_url('user/add') ?>"><button>tambah</button></a>
+    <a href="<?= base_url('user/add') ?>" class="btn-add">tambah user</a>
     <table>
         <thead>
             <tr>
@@ -29,8 +29,7 @@
                     <td>
                         <img src="<?= base_url('users/' . $row->profil); ?>" alt="Cover" width="50" height="50">
                     </td>
-                    <td>
-                        <!-- Tambahkan tombol Edit dan Delete dengan link ke fungsi di controller -->
+                    <td class="td">
                         <a href="<?php echo base_url('user/edit/' . $row->id_user); ?>" class="btn btn-warning">Edit</a>
                         <a href="<?php echo base_url('user/delete/' . $row->id_user); ?>" class="btn btn-danger" onclick="return confirm('yakin mau hapus?')">Delete</a>
                     </td>

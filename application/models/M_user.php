@@ -66,4 +66,16 @@ class M_user extends CI_Model
 
         return false;
     }
+    public function get_user_data($id_user)
+    {
+        // Query database untuk mendapatkan data pengguna berdasarkan id_user
+        $query = $this->db->get_where('tbl_user', array('id_user' => $id_user));
+
+        // Return data pengguna jika ditemukan
+        if ($query->num_rows() == 1) {
+            return $query->row_array();
+        } else {
+            return false; // Return false jika data tidak ditemukan
+        }
+    }
 }

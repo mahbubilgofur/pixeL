@@ -11,6 +11,7 @@
         <!-- Isi sidebar di sini -->
         <a href="<?= base_url('home/editprofil/' . $user_data['id_user']) ?>">Edit Profil</a>
         <a href="<?= base_url('home/edit_foto') ?>">Edit Foto</a>
+        <button class="tblsid" onclick="tombolsidbar()">+</button>
     </div>
     <div class="content-profil-cnt">
         <div class="cnt-profil-kanan">
@@ -32,6 +33,11 @@
                 <div class="input-form-cnt">
                     <input type="text" class="form-control" id="username" name="username" value="<?php echo $user->username; ?>" required>
                 </div>
+                <div class="input-form-cnt">
+                    <input type="password" class="form-control" id="password" name="password" value="<?php echo $user->password; ?>" required>
+
+                </div>
+
 
                 <div class="input-form-cnt">
                     <input type="email" name="email" placeholder="email" value="<?= set_value('email', $user->email); ?>">
@@ -79,6 +85,21 @@
                         emailDisplay.textContent = "Email Display: " + newEmail;
                     });
                 });
+
+                function tombolsidbar() {
+                    var sidbarprofil = document.querySelector('.sidbar-profil');
+                    var content_p = document.querySelector('.content-profil-cnt');
+
+                    if (sidbarprofil.style.width === '150px') {
+                        sidbarprofil.style.width = '0';
+                        sidbarprofil.style.marginLeft = '-150px';
+                        content_p.style.marginLeft = '0';
+                    } else {
+                        sidbarprofil.style.width = '150px';
+                        sidbarprofil.style.marginLeft = '0';
+                        content_p.style.marginLeft = '150px'; // Adjusted margin to match sidebar width
+                    }
+                }
             </script>
 
             <?php echo form_close(); ?>

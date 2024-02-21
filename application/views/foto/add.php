@@ -2,8 +2,14 @@
     <div class="content-wrapper">
         <div class="container-fluid">
             <h1>Add Foto</h1>
+            <?php if ($this->session->flashdata('message')) : ?>
+                <div class="alert alert-dismissible fade show <?php echo $this->session->flashdata('message_type'); ?>" role="alert">
+                    <?php echo $this->session->flashdata('message'); ?>
+                </div>
+            <?php endif; ?>
             <hr>
             <div class="row">
+                <form action="" enctype="multipart/form-data"></form>
                 <div class="col-md-6">
                     <?php echo form_open_multipart('foto/add_foto', 'class="foto-form"'); ?>
                     <div class="form-group">
@@ -12,19 +18,30 @@
                     </div>
                     <div class="form-group">
                         <label for="deskripsi_foto">Deskripsi Foto</label>
-                        <textarea class="form-control" id="deskripsi_foto" name="deskripsi_foto"></textarea>
+                        <textarea class="form-control" id="deskripsi_foto" name="deskripsi_foto" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="id_album">ID Album</label>
-                        <input type="text" class="form-control" id="id_album" name="id_album" required>
+                        <select class="form-control" id="id_album" name="id_album" required>
+                            <?php foreach ($albums as $album) : ?>
+                                <option value="<?php echo $album['id_album']; ?>"><?php echo $album['nama_album']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="id_user">ID User</label>
-                        <input type="text" class="form-control" id="id_user" name="id_user" required>
+                        <select class="form-control" id="id_user" name="id_user" required>
+                            <?php foreach ($users as $user) : ?>
+                                <option value="<?php echo $user['id_user']; ?>"><?php echo $user['username']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="lokasi_file">Upload Foto</label>
                         <input type="file" class="form-control" id="lokasi_file" name="lokasi_file" required>
+                    </div>
+                    <div class="form-group">
+                        <h5 for="lokasi_file">Maksimal ukuran 1mb dan format jpg|jpeg|png</h5>
                     </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     <?php echo form_close(); ?>

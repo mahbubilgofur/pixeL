@@ -1,3 +1,4 @@
+/* General styles */
 body {
 	margin: 0;
 	font-family: "Arial", sans-serif;
@@ -5,9 +6,10 @@ body {
 
 .container {
 	display: flex;
+	flex-direction: column;
+	min-height: 100vh; /* Set minimum height to full viewport height */
 }
-
-/* Sidebar */
+/* CSS untuk .sidebar */
 .sidebar {
 	width: 150px;
 	background-color: #202020;
@@ -18,20 +20,50 @@ body {
 	align-items: center;
 	height: 100vh;
 	position: fixed;
+	transition: margin-left 0.5s;
+	overflow-y: auto; /* Menambahkan scrolling jika konten melebihi tinggi sidebar */
 }
 
+/* Gaya untuk judul sidebar */
 .sidebar h1 {
 	font-size: 24px;
 	padding-bottom: 20px;
 	margin-bottom: 20px;
 }
+/* CSS untuk menandai link yang sedang aktif di sidebar */
+.sidebar a.active {
+	background-color: #333; /* Warna latar belakang saat aktif */
+	color: #ffc107; /* Warna teks saat aktif */
+}
 
+/* Efek hover untuk link yang sedang aktif */
+.sidebar a.active:hover {
+	cursor: pointer;
+	background-color: #333; /* Warna latar belakang saat hover */
+	color: #ffc107; /* Warna teks saat hover */
+}
+
+/* Gaya untuk tautan sidebar */
 .sidebar a {
+	cursor: pointer;
 	color: #fff;
 	text-decoration: none;
 	display: block;
 	margin: 10px;
 	margin-bottom: 10px;
+	transition: background-color 0.3s, color 0.3s; /* Efek hover */
+}
+
+/* Efek hover untuk tautan sidebar */
+.sidebar a:hover {
+	cursor: pointer;
+	background-color: #333; /* Warna latar belakang saat hover */
+	color: #ffc107; /* Warna teks saat hover */
+}
+
+/* Efek aktif untuk tautan sidebar */
+.sidebar a:active {
+	background-color: #555; /* Warna latar belakang saat tombol ditekan */
 }
 
 .content {
@@ -39,6 +71,16 @@ body {
 	padding: 20px;
 	margin-left: 192px;
 	background-color: rgb(255, 255, 255);
+}
+.sidebar-toggle {
+	display: none;
+}
+
+.footer {
+	background-color: #202020;
+	color: #fff;
+	text-align: center;
+	padding: 10px 0;
 }
 
 /* Responsive layout */
@@ -49,14 +91,28 @@ body {
 	}
 
 	.sidebar {
-		width: 100%;
+		width: 0;
 		height: auto;
 		position: fixed;
+		margin-left: -150px;
 	}
 
 	.content {
 		margin-top: 50px;
 		margin-left: 0;
+	}
+
+	.sidebar-toggle {
+		display: block;
+		position: fixed;
+		top: 20px;
+		left: 20px;
+		background-color: #202020;
+		color: #fff;
+		border: none;
+		padding: 10px 15px;
+		cursor: pointer;
+		z-index: 999;
 	}
 }
 
@@ -71,10 +127,44 @@ th,
 td {
 	border: 1px solid #ddd;
 	padding: 10px;
-	text-align: left;
 }
-
+.td {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	justify-content: space-evenly;
+}
+.td a {
+	text-decoration: none;
+}
 th {
 	background-color: #333;
 	color: #fff;
+}
+
+/* CSS untuk tombol Tambah Foto */
+.btn-add {
+	display: inline-block;
+	padding: 10px 20px;
+	font-size: 16px;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	border: none;
+	border-radius: 5px;
+	transition: background-color 0.3s, color 0.3s;
+	background-color: #28a745; /* Warna latar belakang */
+	color: #fff; /* Warna teks */
+}
+
+.btn-add:hover {
+	background-color: #218838; /* Warna latar belakang saat hover */
+}
+
+.btn-add:active {
+	background-color: #1e7e34; /* Warna latar belakang saat tombol ditekan */
+}
+
+.btn-add:focus {
+	outline: none; /* Hilangkan outline saat tombol aktif */
 }

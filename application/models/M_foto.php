@@ -64,7 +64,23 @@ class M_foto extends CI_Model
 
         return $query->row_array();
     }
+    public function get_id_album_by_id_foto($id_foto)
+    {
+        // Query untuk mengambil id_album berdasarkan id_foto dari tabel tbl_foto
+        $this->db->select('id_album');
+        $this->db->where('id_foto', $id_foto);
+        $query = $this->db->get('tbl_foto');
 
+        // Jika query mengembalikan hasil
+        if ($query->num_rows() > 0) {
+            // Ambil id_album dari hasil query
+            $result = $query->row();
+            return $result->id_album;
+        } else {
+            // Jika tidak ada hasil, kembalikan false
+            return false;
+        }
+    }
     public function getIdFoto($id_foto)
     {
         $this->db->where('id_foto', $id_foto);
@@ -166,37 +182,64 @@ class M_foto extends CI_Model
             return array();
         }
     }
+    public function get_all_albums()
+    {
+        $query = $this->db->get('tbl_album');
+        return $query->result_array();
+    }
+    public function get_all_users()
+    {
+        $query = $this->db->get('tbl_user');
+        return $query->result_array();
+    }
+    public function get_foto_by_id($id_foto)
+    {
+        $query = $this->db->get_where('tbl_foto', array('id_foto' => $id_foto));
+        return $query->row_array();
+    }
+    public function update_foto($id_foto, $data)
+    {
+        $this->db->where('id_foto', $id_foto);
+        $this->db->update('tbl_foto', $data);
+    }
 
-    // public function searchFoto($keywords)
-    // {
-    //     $this->db->select('tbl_foto.*, tbl_user.username, tbl_user.profil');
-    //     $this->db->from('tbl_foto');
-    //     $this->db->join('tbl_user', 'tbl_foto.id_user = tbl_user.id_user');
+    public function get_foto_data($id_user)
+    {
+        // Query database untuk mendapatkan data foto pengguna berdasarkan id_user
+        $query = $this->db->get_where('tbl_foto', array('id_user' => $id_user));
 
-    //     // Menghapus spasi dari setiap kata kunci
-    //     $keywords = array_map('trim', $keywords);
-    //     $keywords = array_filter($keywords);
+        // Return data foto jika ditemukan
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return false; // Return false jika data tidak ditemukan
+        }
+    }
 
-    //     if (!empty($keywords)) {
-    //         $this->db->group_start();
-    //         foreach ($keywords as $keyword) {
-    //             $this->db->group_start();
-    //             $length = strlen($keyword);
-    //             for ($i = 0; $i < $length; $i++) {
-    //                 $this->db->or_like('REPLACE(judul_foto, " ", "")', substr($keyword, $i, 1));
-    //             }
-    //             $this->db->group_end();
-    //         }
-    //         $this->db->group_end();
-    //     }
+    public function getAlbumIdByPhotoId($id_foto)
+    {
+        $this->db->select('id_album');
+        $this->db->from('tbl_foto');
+        $this->db->where('id_foto', $id_foto);
+        $query = $this->db->get();
+        $result = $query->row_array();
+        return $result['id_album'];
+    }
 
-    //     $query = $this->db->get();
-
-    //     // Periksa apakah query mengembalikan hasil atau null
-    //     if ($query !== null) {
-    //         return $query->result_array();
-    //     } else {
-    //         return array();
-    //     }
-    // }
+    public function get_foto_id_user()
+    {
+        $this->db->select('tbl_foto.id_foto, tbl_foto.id_user, tbl_foto.lokasi_file, tbl_user.profil, tbl_user.username, 
+        COUNT(DISTINCT tbl_like.id_like) as jumlah_like,
+        COUNT(DISTINCT tbl_komentar.id_komen) as jumlah_komen,
+        COUNT(DISTINCT tbl_view.id_view) as jumlah_view');
+        $this->db->from('tbl_foto');
+        $this->db->join('tbl_user', 'tbl_user.id_user = tbl_foto.id_user');
+        $this->db->join('tbl_like', 'tbl_like.id_foto = tbl_foto.id_foto', 'left');
+        $this->db->join('tbl_komentar', 'tbl_komentar.id_foto = tbl_foto.id_foto', 'left');
+        $this->db->join('tbl_view', 'tbl_view.id_foto = tbl_foto.id_foto', 'left');
+        $this->db->group_by('tbl_foto.id_foto');
+        $this->db->having('jumlah_like >', 0); // Hanya foto dengan jumlah like lebih dari 0
+        $query = $this->db->get();
+        return $query->result();
+    }
 }

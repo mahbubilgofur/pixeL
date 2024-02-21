@@ -4,6 +4,11 @@
 
             <!-- Page Content -->
             <h1>Edit Album</h1>
+            <?php if ($this->session->flashdata('message')) : ?>
+                <div class="alert alert-dismissible fade show <?php echo $this->session->flashdata('message_type'); ?>" role="alert">
+                    <?php echo $this->session->flashdata('message'); ?>
+                </div>
+            <?php endif; ?>
             <hr>
 
             <div class="row">

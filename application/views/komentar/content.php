@@ -1,7 +1,7 @@
 <!-- Content -->
 <div class="content">
     <h2>Table Content</h2>
-    <a href="<?= base_url('komentar/add') ?>"><button>Tambah Komentar</button></a>
+    <!-- <a href="<?= base_url('komentar/add') ?>" class="btn-add">Tambah Komentar</a> -->
     <table>
         <thead>
             <tr>
@@ -21,8 +21,7 @@
                     <td><?php echo $komentar->id_user; ?></td>
                     <td><?php echo $komentar->isi_komentar; ?></td>
                     <td><?php echo $komentar->tgl_komentar; ?></td>
-                    <td>
-                        <!-- Tambahkan tombol Edit dan Delete dengan link ke fungsi di controller -->
+                    <td class="td">
                         <a href="<?php echo base_url('komentar/edit/' . $komentar->id_komen); ?>" class="btn btn-warning">Edit</a>
                         <a href="<?php echo base_url('komentar/delete/' . $komentar->id_komen); ?>" class="btn btn-danger" onclick="return confirm('Yakin mau hapus?')">Delete</a>
                     </td>

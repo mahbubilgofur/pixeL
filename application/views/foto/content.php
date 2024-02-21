@@ -1,7 +1,8 @@
 <!-- Content -->
 <div class="content">
     <h2>Table Content</h2>
-    <a href="<?= base_url('foto/add') ?>"><button>Tambah Foto</button></a>
+    <!-- <a href="<?= base_url('foto/add') ?>" class="btn-add">Tambah Foto</a> -->
+
     <table>
         <thead>
             <tr>
@@ -29,7 +30,7 @@
                     <td>
                         <img src="<?= base_url('fotos/' . $foto->lokasi_file); ?>" alt="Preview" width="100">
                     </td>
-                    <td>
+                    <td class="td">
                         <!-- Tambahkan tombol Edit dan Delete dengan link ke fungsi di controller -->
                         <a href="<?php echo base_url('foto/edit/' . $foto->id_foto); ?>" class="btn btn-warning">Edit</a>
                         <a href="<?php echo base_url('foto/delete/' . $foto->id_foto); ?>" class="btn btn-danger" onclick="return confirm('Yakin mau hapus?')">Delete</a>
@@ -38,6 +39,7 @@
             <?php } ?>
         </tbody>
     </table>
+</div>
 </div>
 </body>
 

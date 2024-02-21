@@ -20,22 +20,6 @@
                             <p><?php echo $foto->deskripsi_foto; ?></p>
                         </div>
                     </div>
-                    <div class="bottom-mid">
-                        <!-- Tampilan untuk Tombol Like -->
-                        <?php if ($role_id == 1 || $role_id == 2) : ?>
-                            <?php if ($is_liked) : ?>
-                                <a href="<?= base_url('home/remove_like/' . $fotos['id_foto']); ?>"><img src="<?= base_url('img/love.png') ?>" alt=""></a>
-                            <?php else : ?>
-                                <a href="<?= base_url('home/add_like/' . $fotos['id_foto']); ?>">🤍</a>
-                            <?php endif; ?>
-                        <?php else : ?>
-                            <a href="<?= base_url('login') ?>">
-                                <p>🤍</p>
-                            </a>
-                        <?php endif; ?>
-                        <p><img src="<?= base_url('img/komen.png') ?>" alt=""></p>
-                    </div>
-
                     <div class="bottom-c">
                         <?php foreach ($komentars as $komentar) : ?>
                             <div class="komen-user">
@@ -56,6 +40,21 @@
                                 </div>
                             </div>
                         <?php endforeach; ?>
+                    </div>
+                    <div class="bottom-mid">
+                        <!-- Tampilan untuk Tombol Like -->
+                        <?php if ($role_id == 1 || $role_id == 2) : ?>
+                            <?php if ($is_liked) : ?>
+                                <a href="<?= base_url('home/remove_like/' . $fotos['id_foto']); ?>"><img src="<?= base_url('img/love.png') ?>" alt=""></a>
+                            <?php else : ?>
+                                <a href="<?= base_url('home/add_like/' . $fotos['id_foto']); ?>">🤍</a>
+                            <?php endif; ?>
+                        <?php else : ?>
+                            <a href="<?= base_url('login') ?>">
+                                <p>🤍</p>
+                            </a>
+                        <?php endif; ?>
+                        <p>2002-22-2</p>
                     </div>
                     <form action="<?= base_url('home/add_komentar') ?>" method="post">
                         <div class="bottom-m">

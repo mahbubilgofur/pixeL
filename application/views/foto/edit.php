@@ -2,6 +2,11 @@
     <div class="content-wrapper">
         <div class="container-fluid">
             <h1>Edit Foto</h1>
+            <?php if ($this->session->flashdata('message')) : ?>
+                <div class="alert alert-dismissible fade show <?php echo $this->session->flashdata('message_type'); ?>" role="alert">
+                    <?php echo $this->session->flashdata('message'); ?>
+                </div>
+            <?php endif; ?>
             <hr>
             <div class="row">
                 <div class="col-md-6">
@@ -16,11 +21,19 @@
                     </div>
                     <div class="form-group">
                         <label for="id_album">ID Album</label>
-                        <input type="text" class="form-control" id="id_album" name="id_album" value="<?php echo $foto->id_album; ?>" required>
+                        <select class="form-control" id="id_album" name="id_album" required>
+                            <?php foreach ($albums as $album) : ?>
+                                <option value="<?php echo $album['id_album']; ?>" <?php echo ($album['id_album'] == $foto->id_album) ? 'selected' : ''; ?>><?php echo $album['nama_album']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="id_user">ID User</label>
-                        <input type="text" class="form-control" id="id_user" name="id_user" value="<?php echo $foto->id_user; ?>" required>
+                        <select class="form-control" id="id_user" name="id_user" required>
+                            <?php foreach ($users as $user) : ?>
+                                <option value="<?php echo $user['id_user']; ?>" <?php echo ($user['id_user'] == $foto->id_user) ? 'selected' : ''; ?>><?php echo $user['username']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="lokasi_file">Ganti Gambar</label>

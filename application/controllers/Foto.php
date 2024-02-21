@@ -21,6 +21,8 @@ class Foto extends CI_Controller
 
         // Load model 'M_foto' untuk mengakses database
         $this->load->model('M_foto');
+        $this->load->model('M_album');
+        $this->load->model('M_user');
     }
 
     public function index()
@@ -31,13 +33,17 @@ class Foto extends CI_Controller
         // Load view
         $this->load->view('admin/sidebar');
         $this->load->view('foto/content', $data);
+        $this->load->view('admin/footer');
     }
 
     public function add()
     {
+        $data['albums'] = $this->M_foto->get_all_albums();
+        $data['users'] = $this->M_foto->get_all_users();
         // Load view untuk menambahkan foto
-        $this->load->view('admin/sidebar');
-        $this->load->view('foto/add');
+        $this->load->view('admin/sidebar', $data);
+        $this->load->view('foto/add', $data);
+        $this->load->view('admin/footer');
     }
 
     public function add_foto()
@@ -68,28 +74,42 @@ class Foto extends CI_Controller
                 redirect('foto');
             } else {
                 // Jika upload gagal, tampilkan pesan error
-                $error = array('error' => $this->upload->display_errors());
-                $this->load->view('admin/sidebar');
-                $this->load->view('foto/add', $error);
+                $error = array('error' => $this->upload->display_errors('<div>', '</div>'));
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal mengunggah foto. ' . $error['error'] . '</div>');
+                redirect('foto/add');
             }
         } else {
             // Load view jika form tidak disubmit
             $this->load->view('admin/sidebar');
             $this->load->view('foto/add');
+            $this->load->view('admin/footer');
         }
     }
-
     public function edit($id)
     {
         $data['foto'] = $this->M_foto->getFotoById($id);
+        $data['albums'] = $this->M_foto->get_all_albums();
+        $data['users'] = $this->M_foto->get_all_users();
         $this->load->view('admin/sidebar');
         $this->load->view('foto/edit', $data);
+        $this->load->view('admin/footer');
     }
 
     public function update($id)
     {
         // Form submission logic for updating foto
         if ($this->input->post()) {
+            // Get existing data of the photo
+            $existing_foto = $this->M_foto->getFotoById($id);
+
+            // Prepare data to be updated
+            $data = array(
+                'judul_foto' => $this->input->post('judul_foto'),
+                'deskripsi_foto' => $this->input->post('deskripsi_foto'),
+                'id_album' => $this->input->post('id_album'),
+                'id_user' => $this->input->post('id_user'),
+            );
+
             // Check if a new file is uploaded
             if (!empty($_FILES['lokasi_file']['name'])) {
                 // Konfigurasi upload gambar
@@ -102,44 +122,22 @@ class Foto extends CI_Controller
                 if ($this->upload->do_upload('lokasi_file')) {
                     // If upload is successful, update with new file
                     $upload_data = $this->upload->data();
-                    $data = array(
-                        'judul_foto' => $this->input->post('judul_foto'),
-                        'deskripsi_foto' => $this->input->post('deskripsi_foto'),
-                        'tgl_unggah' => date('Y-m-d H:i:s'),
-                        'lokasi_file' => $upload_data['file_name'],
-                        'id_album' => $this->input->post('id_album'),
-                        'id_user' => $this->input->post('id_user'),
-                    );
-
-                    $this->M_foto->updateFoto($id, $data);
-
-                    // Delete the old file if needed, uncomment the line below if you want to delete the old file
-                    // unlink('./fotos/' . $this->input->post('old_lokasi_file'));
-
-                    // Redirect or show success message
-                    redirect('foto');
+                    $data['lokasi_file'] = $upload_data['file_name'];
                 } else {
                     // Jika upload gagal, tampilkan pesan error
-                    $error = array('error' => $this->upload->display_errors());
-                    $data['foto'] = $this->M_foto->getFotoById($id);
-                    $this->load->view('admin/sidebar');
-                    $this->load->view('foto/edit', $data + $error);
+                    $error = array('error' => $this->upload->display_errors('<div>', '</div>'));
+                    $data['foto'] = $existing_foto;
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal mengunggah foto. ' . $error['error'] . '</div>');
+                    redirect('foto/edit/' . $id);
+                    return; // Stop further execution
                 }
-            } else {
-                // If no new file is uploaded, update without changing the file
-                $data = array(
-                    'judul_foto' => $this->input->post('judul_foto'),
-                    'deskripsi_foto' => $this->input->post('deskripsi_foto'),
-                    'tgl_unggah' => date('Y-m-d H:i:s'),
-                    'id_album' => $this->input->post('id_album'),
-                    'id_user' => $this->input->post('id_user'),
-                );
-
-                $this->M_foto->updateFoto($id, $data);
-
-                // Redirect or show success message
-                redirect('foto');
             }
+
+            // Perform update
+            $this->M_foto->updateFoto($id, $data);
+
+            // Redirect or show success message
+            redirect('foto');
         } else {
             // Load the edit view if no form submission
             $data['foto'] = $this->M_foto->getFotoById($id);
@@ -151,8 +149,11 @@ class Foto extends CI_Controller
 
             $this->load->view('admin/sidebar');
             $this->load->view('foto/edit', $data);
+            $this->load->view('admin/footer');
         }
     }
+
+
 
     public function delete($id)
     {

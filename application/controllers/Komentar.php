@@ -31,6 +31,7 @@ class Komentar extends CI_Controller
         // Load view
         $this->load->view('admin/sidebar');
         $this->load->view('komentar/content', $data);
+        $this->load->view('admin/footer');
     }
 
     public function add()
@@ -38,6 +39,7 @@ class Komentar extends CI_Controller
         // Load view untuk menambahkan komentar
         $this->load->view('admin/sidebar');
         $this->load->view('komentar/add');
+        $this->load->view('admin/footer');
     }
 
     public function add_komentar()
@@ -59,6 +61,7 @@ class Komentar extends CI_Controller
             // Load view jika form tidak disubmit
             $this->load->view('admin/sidebar');
             $this->load->view('komentar/add');
+            $this->load->view('admin/footer');
         }
     }
 
@@ -67,6 +70,7 @@ class Komentar extends CI_Controller
         $data['komentar'] = $this->M_komentar->getKomentarById($id);
         $this->load->view('admin/sidebar');
         $this->load->view('komentar/edit', $data);
+        $this->load->view('admin/footer');
     }
 
     public function update($id)
@@ -95,6 +99,7 @@ class Komentar extends CI_Controller
 
             $this->load->view('admin/sidebar');
             $this->load->view('komentar/edit', $data);
+            $this->load->view('admin/footer');
         }
     }
 

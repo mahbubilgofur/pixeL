@@ -30,6 +30,7 @@ class Like extends CI_Controller
         // Load view
         $this->load->view('admin/sidebar');
         $this->load->view('like/content', $data);
+        $this->load->view('admin/footer');
     }
 
     public function add()
@@ -37,6 +38,7 @@ class Like extends CI_Controller
         // Load view untuk menambahkan like
         $this->load->view('admin/sidebar');
         $this->load->view('like/add');
+        $this->load->view('admin/footer');
     }
 
     public function add_like()
@@ -57,6 +59,7 @@ class Like extends CI_Controller
             // Load view jika form tidak disubmit
             $this->load->view('admin/sidebar');
             $this->load->view('like/add');
+            $this->load->view('admin/footer');
         }
     }
 
@@ -65,6 +68,7 @@ class Like extends CI_Controller
         $data['like'] = $this->M_like->getLikeById($id);
         $this->load->view('admin/sidebar');
         $this->load->view('like/edit', $data);
+        $this->load->view('admin/footer');
     }
 
     public function update($id)
@@ -92,6 +96,7 @@ class Like extends CI_Controller
 
             $this->load->view('admin/sidebar');
             $this->load->view('like/edit', $data);
+            $this->load->view('admin/footer');
         }
     }
 

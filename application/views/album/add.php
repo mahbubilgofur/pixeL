@@ -5,6 +5,12 @@
 
             <!-- Page Content -->
             <h1>Add Album</h1>
+            <?php if ($this->session->flashdata('message')) : ?>
+                <div class="alert alert-dismissible fade show <?php echo $this->session->flashdata('message_type'); ?>" role="alert">
+                    <?php echo $this->session->flashdata('message'); ?>
+                </div>
+            <?php endif; ?>
+
             <hr>
 
             <div class="row">
@@ -18,11 +24,15 @@
                     </div>
                     <div class="form-group">
                         <label for="deskripsi">Deskripsi</label>
-                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4"></textarea>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="cover">Cover</label>
-                        <input type="file" class="form-control" id="cover" name="cover" accept="image/*">
+                        <input type="file" class="form-control" id="cover" name="cover" accept="image/*" required>
+                    </div>
+
+                    <div class="form-group">
+                        <h5 for="cover">Maksimal ukuran 1mb dan format jpg|jpeg|png</h5>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Simpan</button>

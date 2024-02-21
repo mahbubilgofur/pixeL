@@ -25,13 +25,14 @@ class Home extends CI_Controller
         $this->load->model('M_album');
         $this->load->model('M_foto');
         $this->load->model('M_like');
+        $this->load->model('M_view');
         $this->load->model('M_komentar');
         $this->load->library('user_agent');
         $this->load->helper('url');
     }
     public function index()
     {
-        $DATA['fotos'] = $this->M_foto->getFotos();
+        $DATA['fotos'] = $this->M_foto->get_foto_id_user();
         $DATA['data_user'] = $this->M_user->getuser();
         $DATA['albums'] = $this->M_album->getAlbums();
         $this->load->view('home/header', $DATA);
@@ -41,6 +42,42 @@ class Home extends CI_Controller
     {
         redirect($this->agent->referrer());
     }
+    public function komentar_masuk()
+    {
+        $this->load->view('home/header');
+        $this->load->view('home/komentar_masuk');
+    }
+
+    public function profil_users($id_user)
+    {
+        if (!$this->session->userdata('role_id')) {
+            // Redirect to the login page or handle the case if the user is not logged in
+            redirect('login');
+        }
+        // Load model yang diperlukan
+        $this->load->model('M_user');
+        $this->load->model('M_foto');
+
+        // Ambil data pengguna berdasarkan id_user
+        $user_data = $this->M_user->get_user_data($id_user);
+
+        // Ambil data foto berdasarkan id_user
+        $foto_data = $this->M_foto->get_foto_data($id_user);
+
+        // Pastikan data pengguna ditemukan
+        if ($user_data) {
+            // Lakukan apa yang perlu dilakukan untuk menampilkan profil pengguna
+            $data['user'] = $user_data;
+            $data['foto'] = $foto_data; // Jika ingin menampilkan foto pengguna juga
+            $this->load->view('home/header');
+            $this->load->view('home/profil_users', $data);
+        } else {
+            // Jika data pengguna tidak ditemukan, redirect ke halaman lain atau tampilkan pesan kesalahan
+            redirect('halaman_error');
+        }
+    }
+
+
     public function tentang()
     {
         $this->load->view('home/header');
@@ -48,24 +85,126 @@ class Home extends CI_Controller
     }
     public function foto($id_album)
     {
+        $id_user = $this->session->userdata('id_user');
+
+        // Mendapatkan role ID user dari session (jika ada)
+        $role_id = $this->session->userdata('role_id');
+
+        // Cek apakah pengguna sudah login dan memiliki role yang sesuai
+        if ($id_user && ($role_id == 1 || $role_id == 2)) {
+            // Cek apakah user sudah melihat foto ini sebelumnya
+            $photos = $this->M_foto->getFoto_id_album($id_album);
+            foreach ($photos as $photo) {
+                $viewed = $this->M_view->check_view($id_user, $photo['id_foto']);
+
+                // Jika belum melihat, tambahkan data view
+                if (!$viewed) {
+                    $this->M_view->add_view($id_user, $photo['id_foto']);
+                }
+            }
+        }
         $DATA['data_user'] = $this->M_user->getuser();
         $DATA['photos'] = $this->M_foto->getFoto_id_album($id_album);
         $DATA['likes'] = array();
-
+        $DATA['jumlah_view'] = array();
+        $DATA['is_liked1'] = array();
+        $DATA['role_id'] = $this->session->userdata('role_id');
+        $DATA['fotos'] = array();
+        $DATA['profils'] = array();
+        $DATA['komentars'] = array();
         foreach ($DATA['photos'] as $photo) {
             $jumlah_like = $this->M_like->hitungjumlahlike($photo['id_foto']);
             $DATA['likes'][$photo['id_foto']] = $jumlah_like;
 
             $jumlah_komentar = $this->M_komentar->hitungJumlahKomentarByIdFoto($photo['id_foto']);
             $DATA['komentars'][$photo['id_foto']] = $jumlah_komentar;
-        }
 
+            // Mendapatkan jumlah komentar untuk setiap foto
+            $jumlah_view = $this->M_view->count_views_by_photo_id($photo['id_foto']);
+            $DATA['jumlah_view'][$photo['id_foto']] = $jumlah_view;
+
+            $fotos = $this->M_like->getFotoById($photo['id_foto']);
+            $DATA['fotos'][$photo['id_foto']] = $fotos;
+
+            $like = $this->is_liked1($photo['id_foto']);
+            $DATA['like'][$photo['id_foto']] = $like;
+
+            $profils = $this->M_foto->getUser_andid_foto($photo['id_foto']);
+            $DATA['profils'][$photo['id_foto']] = $profils;
+
+            $komentars = $this->M_komentar->getCommentsByFotoId($photo['id_foto']);
+            $DATA['komentars'][$photo['id_foto']] = $komentars;
+        }
         $this->load->view('home/header', $DATA);
         $this->load->view('home/foto', $DATA);
     }
 
+    public function add_like1($id_foto)
+    {
+        // Lakukan verifikasi role_id atau kondisi lain yang diperlukan
+        $role_id = $this->session->userdata('role_id');
+        if ($role_id != 1 && $role_id != 2) {
+            // Tambahkan logika atau tindakan lain jika role_id tidak memenuhi syarat
+            redirect('login'); // Ganti dengan URL yang sesuai
+            return;
+        }
+
+        // Lakukan penambahan like
+        $id_user = $this->session->userdata('id_user'); // Sesuaikan dengan cara Anda mengelola sesi login
+        $this->M_like->add_like($id_foto, $id_user);
+
+        // Redirect kembali ke halaman foto dengan id_album yang sesuai
+        $id_album = $this->M_foto->getAlbumIdByPhotoId($id_foto); // Mendapatkan id_album dari id_foto
+        redirect('home/foto/' . $id_album);
+    }
+
+    public function remove_like1($id_foto)
+    {
+        // Lakukan verifikasi role_id atau kondisi lain yang diperlukan
+        $role_id = $this->session->userdata('role_id');
+        if ($role_id != 1 && $role_id != 2) {
+            // Tambahkan logika atau tindakan lain jika role_id tidak memenuhi syarat
+            redirect('login'); // Ganti dengan URL yang sesuai
+            return;
+        }
+
+        // Lakukan penghapusan like
+        $id_user = $this->session->userdata('id_user'); // Sesuaikan dengan cara Anda mengelola sesi login
+        $this->M_like->remove_like($id_foto, $id_user);
+
+        // Redirect kembali ke halaman foto dengan id_album yang sesuai
+        $id_album = $this->M_foto->getAlbumIdByPhotoId($id_foto); // Mendapatkan id_album dari id_foto
+        redirect('home/foto/' . $id_album);
+    }
+
+    private function is_liked1($id_foto)
+    {
+        $id_user = $this->session->userdata('id_user'); // Sesuaikan dengan cara Anda mengelola sesi login
+        return $this->M_like->isLiked($id_foto, $id_user);
+    }
+
+
+
     public function detail_foto($id_foto)
     {
+
+        // Mendapatkan ID user dari session (jika ada)
+        $id_user = $this->session->userdata('id_user');
+
+        // Mendapatkan role ID user dari session (jika ada)
+        $role_id = $this->session->userdata('role_id');
+
+        // Cek apakah pengguna sudah login dan memiliki role yang sesuai
+        if ($id_user && ($role_id == 1 || $role_id == 2)) {
+            // Cek apakah user sudah melihat foto ini sebelumnya
+            $viewed = $this->M_view->check_view($id_user, $id_foto);
+
+            // Jika belum melihat, tambahkan data view
+            if (!$viewed) {
+                $this->M_view->add_view($id_user, $id_foto);
+            }
+        }
+
         $DATA['foto'] = $this->M_foto->getIdFoto($id_foto);
         $DATA['profils'] = $this->M_foto->getUser_andid_foto($id_foto);
         $DATA['fotos'] = $this->M_like->getFotoById($id_foto);
@@ -77,6 +216,38 @@ class Home extends CI_Controller
         $this->load->view('home/detail_foto', $DATA);
     }
 
+    public function add_komentar_foto()
+    {
+        $role_id = $this->session->userdata('role_id');
+        if ($role_id != 1 && $role_id != 2) {
+            // Tambahkan logika atau tindakan lain jika role_id tidak memenuhi syarat
+            redirect('login'); // Ganti dengan URL yang sesuai
+            return;
+        }
+
+        $id_user = $this->session->userdata('id_user');
+        $isi_komentar = $this->input->post('isi_komentar');
+        $tgl_komentar = date('Y-m-d H:i:s');
+        $id_foto = $this->input->post('id_foto'); // Ambil id_foto dari formulir
+        $id_album = $this->M_foto->getAlbumIdByPhotoId($id_foto);
+
+        // Memastikan isi_komentar tidak kosong
+        if (empty($isi_komentar)) {
+            redirect('home/foto/' . $id_album);
+        }
+
+        $data = array(
+            'id_foto' => $id_foto,
+            'id_user' => $id_user,
+            'isi_komentar' => $isi_komentar,
+            'tgl_komentar' => $tgl_komentar
+        );
+
+        $this->M_komentar->add_komentar($data);
+
+
+        redirect('home/foto/' . $id_album);
+    }
     public function add_komentar()
     {
         $role_id = $this->session->userdata('role_id');
@@ -121,6 +292,25 @@ class Home extends CI_Controller
         // Redirect to the appropriate photo detail page if id_foto is available
         if ($id_foto) {
             redirect('home/detail_foto/' . $id_foto);
+        } else {
+            // Redirect to a default page or show an error message
+            redirect('home'); // Ganti dengan URL atau tindakan yang sesuai
+        }
+    }
+    public function hapus_foto($id_komen)
+    {
+        // Dapatkan id_foto sebelum menghapus komentar
+        $id_foto = $this->M_komentar->get_id_foto($id_komen);
+
+        // Ambil id_album dari tabel tbl_foto
+        $id_album = $this->M_foto->get_id_album_by_id_foto($id_foto);
+
+        // Hapus komentar
+        $this->M_komentar->hapus_komen($id_komen);
+
+        // Redirect to the appropriate photo detail page if id_album is available
+        if ($id_album) {
+            redirect('home/foto/' . $id_album);
         } else {
             // Redirect to a default page or show an error message
             redirect('home'); // Ganti dengan URL atau tindakan yang sesuai
@@ -408,9 +598,10 @@ class Home extends CI_Controller
             // Update user data including the new profil_image if submitted
             $data['profil'] = isset($profil_image) ? $profil_image : $this->input->post('old_profil_image');
             $this->M_user->updateUser($id, $data);
-
+            // Dapatkan id_user dari session
+            $id_user = $this->session->userdata('id_user');
             // Redirect or show success message
-            redirect('home/profil');
+            redirect('home/editprofil/' . $id_user);
         } else {
             // Load the edit view if no form submission
             $data['user'] = $this->M_user->getUserById($id);
@@ -526,8 +717,21 @@ class Home extends CI_Controller
     // halamancari
     public function fitur_cari()
     {
+        $id_user = $this->session->userdata('id_user');
+
+        // Mendapatkan role ID user dari session (jika ada)
+        $role_id = $this->session->userdata('role_id');
+
+
         $DATA['data_user'] = $this->M_user->getuser();
+
         $DATA['likes'] = array();
+        $DATA['jumlah_view'] = array();
+        $DATA['is_liked1'] = array();
+        $DATA['role_id'] = $this->session->userdata('role_id');
+        $DATA['fotos'] = array();
+        $DATA['profils'] = array();
+        $DATA['komentars'] = array();
         $search_term = $this->input->get('search');
         $keywords = explode(' ', $search_term);
         $DATA['photos'] = $this->M_foto->searchFoto($keywords);
@@ -538,6 +742,23 @@ class Home extends CI_Controller
 
             $jumlah_komentar = $this->M_komentar->hitungJumlahKomentarByIdFoto($photo['id_foto']);
             $DATA['komentars'][$photo['id_foto']] = $jumlah_komentar;
+
+            // Mendapatkan jumlah komentar untuk setiap foto
+            $jumlah_view = $this->M_view->count_views_by_photo_id($photo['id_foto']);
+            $DATA['jumlah_view'][$photo['id_foto']] = $jumlah_view;
+
+            $fotos = $this->M_like->getFotoById($photo['id_foto']);
+            $DATA['fotos'][$photo['id_foto']] = $fotos;
+
+            $like = $this->is_liked1($photo['id_foto']);
+            $DATA['photos'] = $this->M_foto->searchFoto($keywords);
+            $DATA['like'][$photo['id_foto']] = $like;
+
+            $profils = $this->M_foto->getUser_andid_foto($photo['id_foto']);
+            $DATA['profils'][$photo['id_foto']] = $profils;
+
+            $komentars = $this->M_komentar->getCommentsByFotoId($photo['id_foto']);
+            $DATA['komentars'][$photo['id_foto']] = $komentars;
         }
 
 

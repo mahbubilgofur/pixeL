@@ -12,7 +12,8 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(to right, #141e30, #243b55);
+            background-color: #6f84f1;
+            background-image: linear-gradient(90deg, #6f84f1 0%, #00fdd0 100%);
             color: #fff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }

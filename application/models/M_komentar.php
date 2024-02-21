@@ -3,6 +3,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class M_komentar extends CI_Model
 {
+    public function get_id_foto($id_komen)
+    {
+        // Query untuk mengambil id_foto berdasarkan $id_komen dari tabel komentar
+        $this->db->select('id_foto');
+        $this->db->where('id_komen', $id_komen);
+        $query = $this->db->get('tbl_komentar');
+
+        // Jika query mengembalikan hasil
+        if ($query->num_rows() > 0) {
+            // Ambil id_foto dari hasil query
+            $result = $query->row();
+            return $result->id_foto;
+        } else {
+            // Jika tidak ada hasil, kembalikan false
+            return false;
+        }
+    }
     public function getKomentars()
     {
         // Ambil semua data dari tabel tbl_komentar

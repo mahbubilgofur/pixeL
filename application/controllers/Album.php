@@ -31,6 +31,7 @@
             // Load view
             $this->load->view('admin/sidebar');
             $this->load->view('album/content', $data);
+            $this->load->view('admin/footer');
         }
 
         public function add()
@@ -38,29 +39,8 @@
             // Load view untuk menambahkan album
             $this->load->view('admin/sidebar');
             $this->load->view('album/add');
+            $this->load->view('admin/footer');
         }
-
-        // public function add_album()
-        // {
-        //     // Form submission logic for creating album
-        //     if ($this->input->post()) {
-        //         $data = array(
-        //             'nama_album' => $this->input->post('nama_album'),
-        //             'deskripsi' => $this->input->post('deskripsi'),
-        //             'tgl_buat' => date('Y-m-d H:i:s'), // Tanggal dibuat diisi dengan waktu sekarang
-        //             'id_user' => $this->input->post('id_user'),
-        //         );
-
-        //         $this->M_album->insertAlbum($data);
-
-        //         // Redirect or show success message
-        //         redirect('album');
-        //     } else {
-        //         // Load view jika form tidak disubmit
-        //         $this->load->view('admin/sidebar');
-        //         $this->load->view('album/add'); 
-        //     }
-        // }
 
         public function add_album()
         {
@@ -90,17 +70,29 @@
                     // Memanggil model untuk menyimpan data album
                     $this->M_album->insertAlbum($data);
 
-                    // Redirect or show success message
+                    // Set flash message for success
+                    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Album berhasil ditambahkan!</div>');
+
+                    // Redirect
                     redirect('album');
                 } else {
                     // Jika upload gagal, tampilkan pesan error
-                    $error = array('error' => $this->upload->display_errors());
-                    print_r($error);
+                    $error = $this->upload->display_errors();
+                    if (strpos($error, 'jpg|jpeg|png') !== false) {
+                        $message = 'Format file harus jpg, jpeg, atau png.';
+                    } elseif (strpos($error, 'max_size') !== false) {
+                        $message = 'Ukuran file tidak boleh melebihi 1 MB.';
+                    } else {
+                        $message = $error;
+                    }
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">' . $message . '</div>');
+                    redirect('album/add'); // Redirect back to add album form
                 }
             } else {
                 // Load view jika form tidak disubmit
                 $this->load->view('admin/sidebar');
                 $this->load->view('album/add');
+                $this->load->view('admin/footer');
             }
         }
 
@@ -110,7 +102,9 @@
             $data['album'] = $this->M_album->getAlbumById($id);
             $this->load->view('admin/sidebar');
             $this->load->view('album/edit', $data);
+            $this->load->view('admin/footer');
         }
+
 
         public function update($id)
         {
@@ -141,6 +135,18 @@
                 } else {
                     // Jika tidak ada upload baru, gunakan cover lama
                     $cover_path = $album->cover;
+
+                    // Tambahkan pesan error jika terkait dengan tipe file atau ukuran
+                    $error = $this->upload->display_errors();
+                    if (strpos($error, 'jpg|jpeg|png') !== false) {
+                        $message = 'Format file harus jpg, jpeg, atau png.';
+                    } elseif (strpos($error, 'max_size') !== false) {
+                        $message = 'Ukuran file tidak boleh melebihi 1 MB.';
+                    } else {
+                        $message = $error;
+                    }
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">' . $message . '</div>');
+                    redirect('album/edit/' . $id); // Redirect back to edit album form
                 }
 
                 // Data album
@@ -154,7 +160,10 @@
                 // Memanggil model untuk mengupdate data album
                 $this->M_album->updateAlbum($id, $data);
 
-                // Redirect or show success message
+                // Set flash message for success
+                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Album berhasil diperbarui!</div>');
+
+                // Redirect
                 redirect('album');
             } else {
                 // Load the edit view if no form submission
@@ -167,9 +176,9 @@
 
                 $this->load->view('admin/sidebar');
                 $this->load->view('album/edit', $data);
+                $this->load->view('admin/footer');
             }
         }
-
 
 
         public function delete($id)

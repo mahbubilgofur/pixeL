@@ -28,49 +28,16 @@ class User extends CI_Controller
 
         $this->load->view('admin/sidebar');
         $this->load->view('user/content', $DATA);
+        $this->load->view('admin/footer');
     }
 
     public function add()
     {
         $this->load->view('admin/sidebar');
         $this->load->view('user/add');
+        $this->load->view('admin/footer');
     }
-    // public function add_user()
-    // {
-    //     // Form submission logic for creating user
-    //     if ($this->input->post()) {
-    //         $config['upload_path'] = './users/';
-    //         $config['allowed_types'] = 'jpg|jpeg|png';
-    //         $config['max_size'] = 1024;
 
-    //         $this->load->library('upload', $config);
-
-    //         if ($this->upload->do_upload('profil_image')) {
-    //             $upload_data = $this->upload->data();
-    //             $profil_image = $upload_data['file_name'];
-    //         } else {
-    //             $profil_image = 'default.jpg'; // Nama default jika upload gagal
-    //         }
-
-    //         $data = array(
-    //             'username' => $this->input->post('username'),
-    //             'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-    //             'email' => $this->input->post('email'),
-    //             'nama_lengkap' => $this->input->post('nama_lengkap'),
-    //             'alamat' => $this->input->post('alamat'),
-    //             'role_id' => 2,
-    //             'profil' => $profil_image, // Nama file gambar profil
-    //         );
-
-    //         $this->M_user->insert_user($data);
-
-    //         // Redirect or show success message
-    //         redirect('user');
-    //     } else {
-    //         $this->load->view('admin/sidebar');
-    //         $this->load->view('user/add');
-    //     }
-    // }
     public function add_user()
     {
         // Form submission logic for creating user
@@ -90,7 +57,7 @@ class User extends CI_Controller
 
             $data = array(
                 'username' => $this->input->post('username'),
-                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'password' =>  $this->input->post('password'),
                 'email' => $this->input->post('email'),
                 'nama_lengkap' => $this->input->post('nama_lengkap'),
                 'alamat' => $this->input->post('alamat'),
@@ -119,6 +86,7 @@ class User extends CI_Controller
         } else {
             $this->load->view('admin/sidebar');
             $this->load->view('user/add');
+            $this->load->view('admin/footer');
         }
     }
 
@@ -128,6 +96,7 @@ class User extends CI_Controller
         $data['user'] = $this->M_user->getUserById($id);
         $this->load->view('admin/sidebar');
         $this->load->view('user/edit', $data);
+        $this->load->view('admin/footer');
     }
 
     public function update($id)
@@ -164,6 +133,7 @@ class User extends CI_Controller
             $data = array(
                 'username' => $this->input->post('username'),
                 'email' => $this->input->post('email'),
+                'password' => $this->input->post('password'),
                 'nama_lengkap' => $this->input->post('nama_lengkap'),
                 'alamat' => $this->input->post('alamat'),
                 'role_id' => $this->input->post('role_id'),
@@ -188,64 +158,10 @@ class User extends CI_Controller
 
             $this->load->view('admin/sidebar');
             $this->load->view('user/edit', $data);
+            $this->load->view('admin/footer');
         }
     }
 
-
-    // public function update($id)
-    // {
-    //     // Form submission logic for updating user
-    //     if ($this->input->post()) {
-    //         $config['upload_path'] = './users/';
-    //         $config['allowed_types'] = 'jpg|jpeg|png';
-    //         $config['max_size'] = 1024;
-
-    //         $this->load->library('upload', $config);
-
-    //         if ($this->upload->do_upload('profil_image')) {
-    //             $upload_data = $this->upload->data();
-    //             $profil_image = $id . '_' . date('Ymd') . '.jpg'; // Buat nama file baru dengan format id_user_tgl.jpg
-    //             $new_image_path = FCPATH . 'users/' . $profil_image;
-
-    //             // Delete the old image if it exists
-    //             $old_image_path = FCPATH . 'users/' . $this->input->post('old_profil_image');
-    //             if (file_exists($old_image_path)) {
-    //                 unlink($old_image_path);
-    //             }
-
-    //             // Move the uploaded image to the user's profile directory with the new name
-    //             rename($upload_data['full_path'], $new_image_path);
-    //         } else {
-    //             $profil_image = $this->input->post('old_profil_image'); // Gunakan nama lama jika upload gagal
-    //         }
-
-    //         $data = array(
-    //             'username' => $this->input->post('username'),
-    //             'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-    //             'email' => $this->input->post('email'),
-    //             'nama_lengkap' => $this->input->post('nama_lengkap'),
-    //             'alamat' => $this->input->post('alamat'),
-    //             'role_id' => $this->input->post('role_id'),
-    //             'profil' => $profil_image, // Nama file gambar profil
-    //         );
-
-    //         $this->M_user->updateUser($id, $data);
-
-    //         // Redirect or show success message
-    //         redirect('user');
-    //     } else {
-    //         // Load the edit view if no form submission
-    //         $data['user'] = $this->M_user->getUserById($id);
-
-    //         if (!$data['user']) {
-    //             // Handle if user is not found
-    //             show_404();
-    //         }
-
-    //         $this->load->view('admin/sidebar');
-    //         $this->load->view('user/edit', $data);
-    //     }
-    // }
 
 
     public function delete($id)

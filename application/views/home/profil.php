@@ -45,6 +45,7 @@
         </script>
         <div class="top4">
             <a href="<?= base_url('home/editprofil/' . $user_data['id_user']) ?>">Edit Profil</a>
+            <a href="<?= base_url('home/edit_foto') ?>">Edit Foto</a>
         </div>
 
 

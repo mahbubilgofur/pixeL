@@ -35,7 +35,7 @@ class Login extends CI_Controller
         $user = $this->M_user->get_user_by_email($email);
 
         if ($user) {
-            if (password_verify($password, $user->password)) {
+            if ($password === $user->password) {
                 $data = [
                     'email' => $user->email,
                     'role_id' => $user->role_id,
@@ -72,9 +72,10 @@ class Login extends CI_Controller
         if ($this->form_validation->run() == false) {
             $this->load->view('register');
         } else {
+            $password = htmlspecialchars($this->input->post('password', true)); // Mengambil password dari inputan form
             $data = [
                 'username' => htmlspecialchars($this->input->post('username', true)),
-                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'password' => $password,
                 'email' =>  htmlspecialchars($this->input->post('email', true)),
                 'nama_lengkap' => htmlspecialchars($this->input->post('nama_lengkap', true)),
                 'alamat' => htmlspecialchars($this->input->post('alamat', true)),
@@ -135,6 +136,4 @@ class Login extends CI_Controller
         $this->session->set_flashdata('message', $message);
         redirect($redirect_url);
     }
-
-
 }
