@@ -85,4 +85,14 @@ class M_like extends CI_Model
         $this->db->where('tbl_like.id_user', $id_user);
         return $this->db->get()->result();
     }
+    public function get_all_fotos()
+    {
+        $query = $this->db->get('tbl_foto');
+        return $query->result_array();
+    }
+    public function get_all_users()
+    {
+        $query = $this->db->get('tbl_user');
+        return $query->result_array();
+    }
 }

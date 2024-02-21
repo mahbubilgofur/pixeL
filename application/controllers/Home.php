@@ -540,8 +540,6 @@ class Home extends CI_Controller
 
 
 
-
-
     public function editprofil($id_user)
     {
         // Periksa apakah id_user valid atau sesuai dengan pengguna yang sedang login
@@ -556,65 +554,82 @@ class Home extends CI_Controller
         $this->load->view('home/header');
         $this->load->view('home/content-edit-profil', $data);
     }
+
+
     public function update($id)
     {
-        // Form submission logic for updating user
-        if ($this->input->post()) {
+        // Set aturan validasi untuk formulir
+        $this->form_validation->set_rules('username', 'Username', 'required|trim|max_length[20]');
+        $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[3]', [
+            'min_length' => 'Password wajib minimal 3 karakter'
+        ]);
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
+
+        // Jalankan validasi formulir
+        if ($this->form_validation->run() == FALSE) {
+            // Jika validasi gagal, muat kembali halaman edit profil dengan pesan kesalahan
+            $data['user'] = $this->M_user->getUserById($id);
+
+            if (!$data['user']) {
+                // Tangani jika pengguna tidak ditemukan
+                show_404();
+            }
+
+            $this->load->view('home/header');
+            $this->load->view('home/content-edit-profil', $data);
+        } else {
+            // Konfigurasi untuk unggah gambar
             $config['upload_path'] = './users/';
             $config['allowed_types'] = 'jpg|jpeg|png';
             $config['max_size'] = 1024;
 
             $this->load->library('upload', $config);
 
-            // Check if the profil_image file is submitted
+            // Periksa apakah file profil_image telah dikirim
             if (!empty($_FILES['profil_image']['name'])) {
                 if ($this->upload->do_upload('profil_image')) {
                     $upload_data = $this->upload->data();
 
-                    // Delete the old image if it exists
+                    // Hapus gambar lama jika ada
                     $old_image_path = FCPATH . 'users/' . $this->input->post('old_profil_image');
                     if (file_exists($old_image_path)) {
                         unlink($old_image_path);
                     }
 
-                    // Move the uploaded image to the user's profile directory with the original name
+                    // Pindahkan gambar yang diunggah ke direktori profil pengguna dengan nama asli
                     $profil_image = $upload_data['file_name'];
                     rename($upload_data['full_path'], FCPATH . 'users/' . $profil_image);
+
+                    // Set pesan keberhasilan setelah pembaruan data pengguna berhasil
+                    $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
                 } else {
-                    // Jika upload gambar gagal, set pesan error dan kembali ke halaman edit profil
-                    $this->session->set_flashdata('error', $this->upload->display_errors());
-                    redirect('user/edit/' . $id);
+                    // Jika pengunggahan gambar gagal, set pesan kesalahan dan redirect ke halaman edit profil
+                    $this->session->set_flashdata('error', 'Gagal mengunggah gambar: ' . $this->upload->display_errors());
+                    redirect('home/editprofil/' . $id);
                 }
             }
 
             $data = array(
                 'username' => $this->input->post('username'),
                 'email' => $this->input->post('email'),
-
+                'password' => $this->input->post('password')
             );
 
-
-
-            // Update user data including the new profil_image if submitted
+            // Perbarui data pengguna termasuk profil_image baru jika dikirim
             $data['profil'] = isset($profil_image) ? $profil_image : $this->input->post('old_profil_image');
             $this->M_user->updateUser($id, $data);
-            // Dapatkan id_user dari session
-            $id_user = $this->session->userdata('id_user');
-            // Redirect or show success message
-            redirect('home/editprofil/' . $id_user);
-        } else {
-            // Load the edit view if no form submission
-            $data['user'] = $this->M_user->getUserById($id);
 
-            if (!$data['user']) {
-                // Han  dle if user is not found
-                show_404();
-            }
+            // Set pesan keberhasilan
+            $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
 
-            $this->load->view('home/header');
-            $this->load->view('home/content-edit-profil', $data);
+            // Redirect ke halaman edit profil
+            redirect('home/editprofil/' . $id);
         }
     }
+
+
+
+
 
 
     public function edit_foto()
@@ -717,11 +732,6 @@ class Home extends CI_Controller
     // halamancari
     public function fitur_cari()
     {
-        $id_user = $this->session->userdata('id_user');
-
-        // Mendapatkan role ID user dari session (jika ada)
-        $role_id = $this->session->userdata('role_id');
-
 
         $DATA['data_user'] = $this->M_user->getuser();
 

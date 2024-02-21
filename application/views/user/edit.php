@@ -5,6 +5,25 @@
 
             <!-- Page Content -->
             <h1>Edit User</h1>
+            <?php if (validation_errors()) : ?>
+                <div class="alert alert-danger">
+                    <?php echo validation_errors(); ?>
+                </div>
+            <?php endif; ?>
+
+            <!-- Menampilkan pesan kesalahan dari flashdata jika ada -->
+            <?php if ($this->session->flashdata('error')) : ?>
+                <div class="alert alert-danger">
+                    <?php echo $this->session->flashdata('error'); ?>
+                </div>
+            <?php endif; ?>
+
+            <!-- Menampilkan pesan sukses dari flashdata jika ada -->
+            <?php if ($this->session->flashdata('success')) : ?>
+                <div class="alert alert-success">
+                    <?php echo $this->session->flashdata('success'); ?>
+                </div>
+            <?php endif; ?>
             <hr>
 
             <div class="row">

@@ -18,6 +18,10 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        .alert {
+            color: black;
+        }
+
         .register-container {
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
@@ -45,6 +49,13 @@
             color: #333;
         }
 
+        .form-groupp {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
         .form-group input {
             width: 100%;
             padding: 10px;
@@ -55,7 +66,7 @@
         }
 
         .register-button {
-            background-color: #28a745;
+            background-color: black;
             color: #fff;
             padding: 12px;
             border: none;
@@ -64,7 +75,25 @@
             font-size: 16px;
         }
 
+        .register-buttonn {
+            background-color: black;
+            color: #fff;
+            padding: 11px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        a .register-buttonn {
+            text-decoration: none;
+        }
+
         .register-button:hover {
+            background-color: #218838;
+        }
+
+        .register-buttonn:hover {
             background-color: #218838;
         }
 
@@ -87,8 +116,10 @@
 
 <body>
     <div class="register-container">
-        <?php echo validation_errors('<div class="alert alert-danger">', '</div>'); ?>
-        <?php echo $this->session->flashdata('message'); ?>
+        <div class="alert">
+            <?php echo validation_errors('<div class="alert alert-danger">', '</div>'); ?>
+            <?php echo $this->session->flashdata('message'); ?>
+        </div>
         <h2>Register</h2>
         <?php echo form_open('login/register'); ?>
         <div class="form-group">
@@ -111,9 +142,13 @@
             <label for="alamat">Alamat</label>
             <input type="text" id="alamat" name="alamat" required>
         </div>
-        <button type="submit" class="register-button">Register</button>
-        <?php echo form_close(); ?>
-        <p class="login-text">Sudah punya akun? <a href="<?= base_url() ?>login">Login di sini</a></p>
+        <div class="form-groupp">
+            <a href="<?= base_url('login') ?>">
+                <div class="register-buttonn">Kembali</div>
+            </a>
+            <button type="submit" class="register-button">Register</button>
+            <?php echo form_close(); ?>
+        </div>
     </div>
 </body>
 

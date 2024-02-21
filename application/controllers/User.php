@@ -40,8 +40,24 @@ class User extends CI_Controller
 
     public function add_user()
     {
-        // Form submission logic for creating user
-        if ($this->input->post()) {
+        $this->form_validation->set_rules('username', 'Username', 'required|trim|max_length[20]');
+        $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[3]', [
+            'min_length' => 'Password wajib minimal 3 karakter'
+        ]);
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[tbl_user.email]', [
+            'is_unique' => 'Email sudah digunakan'
+        ]);
+        $this->form_validation->set_rules('nama_lengkap', 'Nama Lengkap', 'required|trim');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required|trim');
+
+        // Form validation
+        if ($this->form_validation->run() == FALSE) {
+            // Validation failed, load view with validation errors
+            $this->load->view('admin/sidebar');
+            $this->load->view('user/add');
+            $this->load->view('admin/footer');
+        } else {
+            // Form submission logic for creating user
             $config['upload_path'] = './users/';
             $config['allowed_types'] = 'jpg|jpeg|png';
             $config['max_size'] = 1024;
@@ -83,12 +99,10 @@ class User extends CI_Controller
 
             // Redirect or show success message
             redirect('user');
-        } else {
-            $this->load->view('admin/sidebar');
-            $this->load->view('user/add');
-            $this->load->view('admin/footer');
         }
     }
+
+
 
 
     public function edit($id)
@@ -98,11 +112,28 @@ class User extends CI_Controller
         $this->load->view('user/edit', $data);
         $this->load->view('admin/footer');
     }
-
     public function update($id)
     {
-        // Form submission logic for updating user
-        if ($this->input->post()) {
+        // Set rules and custom error messages
+        $this->form_validation->set_rules('username', 'Username', 'required|trim|max_length[20]');
+        $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[3]', [
+            'min_length' => 'Password wajib minimal 3 karakter'
+        ]);
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email', [
+            'is_unique' => 'Email sudah digunakan'
+        ]);
+        $this->form_validation->set_rules('nama_lengkap', 'Nama Lengkap', 'required|trim');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required|trim');
+
+        // Form validation
+        if ($this->form_validation->run() == FALSE) {
+            // Validation failed, load view with validation errors
+            $data['user'] = $this->M_user->getUserById($id);
+            $this->load->view('admin/sidebar');
+            $this->load->view('user/edit', $data);
+            $this->load->view('admin/footer');
+        } else {
+            // Form submission logic for updating user
             $config['upload_path'] = './users/';
             $config['allowed_types'] = 'jpg|jpeg|png';
             $config['max_size'] = 1024;
@@ -139,26 +170,12 @@ class User extends CI_Controller
                 'role_id' => $this->input->post('role_id'),
             );
 
-
-
             // Update user data including the new profil_image if submitted
             $data['profil'] = isset($profil_image) ? $profil_image : $this->input->post('old_profil_image');
             $this->M_user->updateUser($id, $data);
 
             // Redirect or show success message
             redirect('user');
-        } else {
-            // Load the edit view if no form submission
-            $data['user'] = $this->M_user->getUserById($id);
-
-            if (!$data['user']) {
-                // Handle if user is not found
-                show_404();
-            }
-
-            $this->load->view('admin/sidebar');
-            $this->load->view('user/edit', $data);
-            $this->load->view('admin/footer');
         }
     }
 

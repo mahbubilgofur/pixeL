@@ -22,7 +22,7 @@
                         <label for="nama_album">Nama Album</label>
                         <input type="text" class="form-control" id="nama_album" name="nama_album" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group">    
                         <label for="deskripsi">Deskripsi</label>
                         <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4" required></textarea>
                     </div>

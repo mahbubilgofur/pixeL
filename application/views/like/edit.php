@@ -12,11 +12,19 @@
                     <?php echo form_open('like/update/' . $like->id_like, 'class="like-form"'); ?>
                     <div class="form-group">
                         <label for="id_foto">ID Foto</label>
-                        <input type="text" class="form-control" id="id_foto" name="id_foto" value="<?php echo $like->id_foto; ?>" required>
+                        <select class="form-control" id="id_foto" name="id_foto" required>
+                            <?php foreach ($fotos as $foto) : ?>
+                                <option value="<?php echo $foto['id_foto']; ?>" <?php echo ($foto['id_foto'] == $like->id_foto) ? 'selected' : ''; ?>><?php echo $foto['judul_foto']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="id_user">ID User</label>
-                        <input type="text" class="form-control" id="id_user" name="id_user" value="<?php echo $like->id_user; ?>" required>
+                        <select class="form-control" id="id_user" name="id_user" required>
+                            <?php foreach ($users as $user) : ?>
+                                <option value="<?php echo $user['id_user']; ?>" <?php echo ($user['id_user'] == $like->id_user) ? 'selected' : ''; ?>><?php echo $user['username']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Update</button>

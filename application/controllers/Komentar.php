@@ -36,6 +36,8 @@ class Komentar extends CI_Controller
 
     public function add()
     {
+        $data['fotos'] = $this->M_komentar->get_all_fotos();
+        $data['users'] = $this->M_komentar->get_all_users();
         // Load view untuk menambahkan komentar
         $this->load->view('admin/sidebar');
         $this->load->view('komentar/add');
@@ -67,6 +69,8 @@ class Komentar extends CI_Controller
 
     public function edit($id)
     {
+        $data['fotos'] = $this->M_komentar->get_all_fotos();
+        $data['users'] = $this->M_komentar->get_all_users();
         $data['komentar'] = $this->M_komentar->getKomentarById($id);
         $this->load->view('admin/sidebar');
         $this->load->view('komentar/edit', $data);

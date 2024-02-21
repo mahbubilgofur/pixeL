@@ -156,7 +156,7 @@
             togglePassword.addEventListener('click', function() {
                 const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordField.setAttribute('type', type);
-                eyeIcon.src = type === 'password' ? 'img/a1.png' : 'img/a3.png';
+                eyeIcon.src = type === 'password' ? 'img/a3.png' : 'img/a1.png';
             });
         </script>
 

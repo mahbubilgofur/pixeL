@@ -35,6 +35,8 @@ class Like extends CI_Controller
 
     public function add()
     {
+        $data['fotos'] = $this->M_like->get_all_fotos();
+        $data['users'] = $this->M_like->get_all_users();
         // Load view untuk menambahkan like
         $this->load->view('admin/sidebar');
         $this->load->view('like/add');
@@ -65,6 +67,8 @@ class Like extends CI_Controller
 
     public function edit($id)
     {
+        $data['fotos'] = $this->M_like->get_all_fotos();
+        $data['users'] = $this->M_like->get_all_users();
         $data['like'] = $this->M_like->getLikeById($id);
         $this->load->view('admin/sidebar');
         $this->load->view('like/edit', $data);

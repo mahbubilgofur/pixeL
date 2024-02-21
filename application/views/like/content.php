@@ -1,7 +1,7 @@
 <!-- Content -->
 <div class="content">
     <h2>Table Content</h2>
-    <a href="<?= base_url('like/add') ?>" class="btn-add">Tambah Like</a>
+    <!-- <a href="<?= base_url('like/add') ?>" class="btn-add">Tambah Like</a> -->
     <table>
         <thead>
             <tr>
@@ -20,7 +20,7 @@
                     <td><?php echo $like->id_user; ?></td>
                     <td><?php echo $like->tgl_like; ?></td>
                     <td class="td">
-                        <a href="<?php echo base_url('like/edit/' . $like->id_like); ?>" class="btn btn-warning">Edit</a>
+                        <!-- <a href="<?php echo base_url('like/edit/' . $like->id_like); ?>" class="btn btn-warning">Edit</a> -->
                         <a href="<?php echo base_url('like/delete/' . $like->id_like); ?>" class="btn btn-danger" onclick="return confirm('Yakin mau hapus?')">Delete</a>
                     </td>
                 </tr>

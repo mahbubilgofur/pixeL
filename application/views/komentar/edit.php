@@ -13,11 +13,19 @@
                     <?php echo form_open('komentar/update/' . $komentar->id_komen, 'class="komentar-form"'); ?>
                     <div class="form-group">
                         <label for="id_foto">ID Foto</label>
-                        <input type="text" class="form-control" id="id_foto" name="id_foto" value="<?php echo $komentar->id_foto; ?>" required>
+                        <select class="form-control" id="id_foto" name="id_foto" required>
+                            <?php foreach ($fotos as $foto) : ?>
+                                <option value="<?php echo $foto['id_foto']; ?>" <?php echo ($foto['id_foto'] == $komentar->id_foto) ? 'selected' : ''; ?>><?php echo $foto['judul_foto']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="id_user">ID User</label>
-                        <input type="text" class="form-control" id="id_user" name="id_user" value="<?php echo $komentar->id_user; ?>" required>
+                        <select class="form-control" id="id_user" name="id_user" required>
+                            <?php foreach ($users as $user) : ?>
+                                <option value="<?php echo $user['id_user']; ?>" <?php echo ($user['id_user'] == $komentar->id_user) ? 'selected' : ''; ?>><?php echo $user['username']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="isi_komentar">Isi Komentar</label>
@@ -64,13 +72,16 @@
         }
 
         input,
-        textarea {
+        textarea,
+        select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+            margin-bottom: 10px;
         }
+
 
         button {
             cursor: pointer;

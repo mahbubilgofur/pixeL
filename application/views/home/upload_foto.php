@@ -107,12 +107,25 @@
         border: 1px black;
     }
 
-    .textarea-input {
+    .textar {
         border: 1px solid white;
         width: 100%;
         height: 80px;
         margin-bottom: 15px;
         border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+    }
+
+    .textar textarea {
+        border: none;
+        outline: none;
+        border: 1px solid white;
+        width: 90%;
+        height: 90%;
+        border-radius: 10px;
     }
 
 
@@ -148,7 +161,9 @@
             </select>
 
             <label for="deskripsi_foto">Deskripsi:</label>
-            <textarea name="deskripsi_foto" class="textarea-input" required><?php echo set_value('deskripsi_foto'); ?></textarea>
+            <div class="textar">
+                <textarea name="deskripsi_foto" class="textarea-input" required><?php echo set_value('deskripsi_foto'); ?></textarea>
+            </div>
             <label for="lokasi_file">Upload Foto:</label>
             <div class="type">
                 <input type="file" name="lokasi_file" class="form-inputfile" required />

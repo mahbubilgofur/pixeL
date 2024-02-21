@@ -1570,14 +1570,54 @@
 		background-color: rgb(255, 255, 255);
 	}
 	.input-form-cnt {
+		border-radius: 20px;
+		display: flex;
+		justify-content: start;
+		width: 400px;
+		height: 10%;
+		margin: 10px;
+	}
+	.input-form-cnp {
+		border-radius: 20px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		justify-content: space-evenly;
+		width: 400px;
+		height: 10%;
+		margin: 10px;
+		border: 5px solid rgba(0, 0, 0, 0.074);
+	}
+	.input-form-cnp input {
+		width: 90%;
+		height: 100%;
+		border: none;
+		outline: none; /* Menambahkan ini untuk menghilangkan outline saat input berfokus */
+	}
+
+	.input-form-cntt {
 		background-color: grey;
 		border-radius: 20px;
 		display: flex;
 		justify-content: start;
-		width: 100%;
-		height: 10%;
+		width: 400px;
+		height: 20%;
 		margin: 10px;
 	}
+	.input-form-cnttt {
+		border-radius: 20px;
+		display: flex;
+		justify-content: start;
+		width: 400px;
+		height: 10%;
+		margin: 20px;
+	}
+	.input-form-cntt textarea {
+		border: 5px solid rgba(0, 0, 0, 0.074);
+		width: 100%;
+		height: 100%;
+	}
+
 	.input-form-cnt input {
 		border-radius: 20px;
 		border: 5px solid rgba(0, 0, 0, 0.074);
@@ -1620,6 +1660,61 @@
 }
 /*  */
 @media only screen and (max-width: 504px) {
+	.input-form-cnt {
+		border-radius: 20px;
+		display: flex;
+		justify-content: start;
+		width: 300px;
+		height: 10%;
+		margin: 10px;
+	}
+	.input-form-cnp {
+		border-radius: 20px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		justify-content: space-evenly;
+		width: 300px;
+		height: 10%;
+		margin: 10px;
+		border: 5px solid rgba(0, 0, 0, 0.074);
+	}
+	.input-form-cnp input {
+		width: 90%;
+		height: 100%;
+		border: none;
+		outline: none; /* Menambahkan ini untuk menghilangkan outline saat input berfokus */
+	}
+
+	.input-form-cntt {
+		background-color: grey;
+		border-radius: 20px;
+		display: flex;
+		justify-content: start;
+		width: 300px;
+		height: 20%;
+		margin: 10px;
+	}
+	.input-form-cnttt {
+		border-radius: 20px;
+		display: flex;
+		justify-content: start;
+		width: 300px;
+		height: 10%;
+		margin: 20px;
+	}
+	.input-form-cntt textarea {
+		border: 5px solid rgba(0, 0, 0, 0.074);
+		width: 100%;
+		height: 100%;
+	}
+
+	.input-form-cnt input {
+		border-radius: 20px;
+		border: 5px solid rgba(0, 0, 0, 0.074);
+		width: 100%;
+		height: 100%;
+	}
 	.edit-profil-cnt {
 		display: flex;
 		justify-content: center;
@@ -1669,21 +1764,7 @@
 		height: 400px;
 		background-color: rgb(255, 255, 255);
 	}
-	.input-form-cnt {
-		background-color: grey;
-		border-radius: 20px;
-		display: flex;
-		justify-content: start;
-		width: 100%;
-		height: 10%;
-		margin: 10px;
-	}
-	.input-form-cnt input {
-		border-radius: 20px;
-		border: 5px solid rgba(0, 0, 0, 0.074);
-		width: 100%;
-		height: 100%;
-	}
+
 	.mid-profil-cnt {
 		display: flex;
 		justify-content: start;
@@ -1721,6 +1802,16 @@
 /*  */
 
 @media only screen and (max-width: 486px) {
+	.cnt-profil-kanann {
+		background-color: #00000004;
+		width: 50%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		margin-top: 50px;
+	}
 	.profil-cnt {
 		margin-top: 150px;
 		width: 100%;
@@ -1781,9 +1872,9 @@
 		transition: all 3s;
 		position: absolute;
 		bottom: 55px;
-		right: 10px;
-		width: 70px;
-		height: 80px;
+		right: 5px;
+		width: 60px;
+		height: 60px;
 		border-radius: 20px;
 		background-color: black;
 		display: flex;
@@ -1906,6 +1997,9 @@
 	}
 
 	.cnt-awl {
+		opacity: 0;
+		transform: translateY(-30%);
+		transition: all 2s;
 		z-index: 100;
 		width: 70%;
 		height: 20%;
@@ -1916,8 +2010,15 @@
 		overflow-y: hidden;
 		white-space: nowrap;
 	}
+
+	.animasii {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 10px;
+	}
 	.album {
-		transform: translateX(600px);
+		transform: translateX(200px);
 		margin: 2px;
 		width: 200px;
 		height: auto;
@@ -2541,6 +2642,32 @@
 		height: 20px;
 		border-radius: 100%;
 	}
+	.top-cont {
+		display: flex;
+		align-items: center;
+		justify-content: start;
+		margin-left: 20px;
+		width: 100%;
+		height: 15%;
+	}
+	.top-cont a {
+		display: flex;
+		align-items: center;
+		justify-content: start;
+	}
+	.top-cont a img {
+		cursor: pointer;
+		width: 20px;
+		border-radius: 100%;
+		height: 20px;
+	}
+	.top-cont a p {
+		display: none;
+		font-size: 15px;
+		cursor: pointer;
+		margin-left: 5px;
+		color: white;
+	}
 }
 @media only screen and (max-width: 358px) {
 	.modals {
@@ -2702,5 +2829,31 @@
 	.show {
 		opacity: 1;
 		transform: translatey(0);
+	}
+
+	.top-cont {
+		display: flex;
+		align-items: center;
+		justify-content: start;
+		margin-left: 20px;
+		width: 100%;
+		height: 15%;
+	}
+	.top-cont a {
+		display: flex;
+		align-items: center;
+		justify-content: start;
+	}
+	.top-cont a img {
+		cursor: pointer;
+		width: 20px;
+		border-radius: 100%;
+		height: 20px;
+	}
+	.top-cont a p {
+		font-size: 15px;
+		cursor: pointer;
+		margin-left: 5px;
+		color: white;
 	}
 }

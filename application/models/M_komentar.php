@@ -110,4 +110,14 @@ class M_komentar extends CI_Model
         $query = $this->db->get();
         return $query->row()->jumlah_komentar;
     }
+    public function get_all_fotos()
+    {
+        $query = $this->db->get('tbl_foto');
+        return $query->result_array();
+    }
+    public function get_all_users()
+    {
+        $query = $this->db->get('tbl_user');
+        return $query->result_array();
+    }
 }

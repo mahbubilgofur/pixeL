@@ -13,11 +13,19 @@
                     <?php echo form_open('komentar/add_komentar', 'class="komentar-form"'); ?>
                     <div class="form-group">
                         <label for="id_foto">ID Foto</label>
-                        <input type="text" class="form-control" id="id_foto" name="id_foto" required>
+                        <select class="form-control" id="id_foto" name="id_foto" required>
+                            <?php foreach ($fotos as $foto) : ?>
+                                <option value="<?php echo $foto['id_foto']; ?>"><?php echo $foto['judul_foto']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="id_user">ID User</label>
-                        <input type="text" class="form-control" id="id_user" name="id_user" required>
+                        <select class="form-control" id="id_user" name="id_user" required>
+                            <?php foreach ($users as $user) : ?>
+                                <option value="<?php echo $user['id_user']; ?>"><?php echo $user['username']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="isi_komentar">Isi Komentar</label>
@@ -64,7 +72,8 @@
         }
 
         input,
-        textarea {
+        textarea,
+        select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -72,6 +81,7 @@
             box-sizing: border-box;
             margin-bottom: 10px;
         }
+
 
         button {
             cursor: pointer;

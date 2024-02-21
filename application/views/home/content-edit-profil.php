@@ -17,6 +17,25 @@
         <div class="cnt-profil-kanan">
             <div class="top-profil-cnt">
                 <p>Edit Profil</p>
+                <?php if (validation_errors()) : ?>
+                    <div class="alert alert-danger">
+                        <?php echo validation_errors(); ?>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Menampilkan pesan kesalahan dari flashdata jika ada -->
+                <?php if ($this->session->flashdata('error')) : ?>
+                    <div class="alert alert-danger">
+                        <?php echo $this->session->flashdata('error'); ?>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Menampilkan pesan sukses dari flashdata jika ada -->
+                <?php if ($this->session->flashdata('success')) : ?>
+                    <div class="alert alert-success">
+                        <?php echo $this->session->flashdata('success'); ?>
+                    </div>
+                <?php endif; ?>
             </div>
             <?php echo form_open_multipart('home/update/' . $user->id_user, 'class="user-form"'); ?>
             <div class="mid-profil-cnt">
@@ -28,24 +47,23 @@
                 <?php endif; ?>
                 <input type="hidden" name="old_profil_image" value="<?php echo $user->profil; ?>">
             </div>
-
             <div class="bottom-profil-cnt">
                 <div class="input-form-cnt">
                     <input type="text" class="form-control" id="username" name="username" value="<?php echo $user->username; ?>" required>
                 </div>
-                <div class="input-form-cnt">
+                <div class="input-form-cnp">
                     <input type="password" class="form-control" id="password" name="password" value="<?php echo $user->password; ?>" required>
-
+                    <a type="button" id="togglePassword">
+                        <img id="eyeIcon" src="<?= base_url('') ?>img/a3.png" alt="Show Password" style="width: 20px;">
+                    </a>
                 </div>
 
-
                 <div class="input-form-cnt">
-                    <input type="email" name="email" placeholder="email" value="<?= set_value('email', $user->email); ?>">
-                    <?php echo form_error('email'); ?>
+                    <input type="email" name="email" placeholder="email" value="<?= set_value('email', $user->email); ?>" required>
                 </div>
 
                 <div class="simpan-profil">
-                    <input type="submit" name="simpan_profil" value="Simpan">
+                    <button type="submit" name="simpan_profil">Update</button>
                 </div>
             </div>
             <style>
@@ -64,8 +82,80 @@
                     height: 100%;
                     border: 1px solid #0000001b;
                 }
+
+                .alert {
+                    position: fixed;
+                    top: 20px;
+                    /* Sesuaikan dengan jarak dari bagian atas layar */
+                    right: 20px;
+                    /* Sesuaikan dengan jarak dari bagian kanan layar */
+                    width: 190px;
+                    height: 60px;
+                    border-radius: 10px;
+                    /* Sesuaikan lebar pesan flash */
+                    z-index: 9999;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    /* Pastikan pesan flash muncul di atas elemen lain */
+                    display: none;
+                    /* Sembunyikan pesan flash secara default */
+                }
+
+                .alert-danger {
+                    padding: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: red;
+                    font-size: 15px;
+                    color: white;
+                }
+
+                .alert-success {
+                    padding: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: green;
+                    color: white;
+                }
             </style>
             <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Select all flash messages
+                    var flashMessages = document.querySelectorAll('.alert');
+
+                    // Loop through each flash message
+                    flashMessages.forEach(function(message) {
+                        // Show the message
+                        message.style.display = 'flex';
+
+                        // Hide the message after 3 seconds
+                        setTimeout(function() {
+                            message.style.display = 'none';
+                        }, 2000);
+
+                        // Add event listener to close button
+                        var closeButton = message.querySelector('.close');
+                        if (closeButton) {
+                            closeButton.addEventListener('click', function() {
+                                message.style.display = 'none';
+                            });
+                        }
+                    });
+                });
+
+                const togglePassword = document.getElementById('togglePassword');
+                const passwordField = document.getElementById('password');
+                const eyeIcon = document.getElementById('eyeIcon');
+
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    eyeIcon.src = type === 'password' ? '<?= base_url('') ?>img/a3.png' : '<?= base_url('') ?>img/a1.png';
+                });
+
                 document.addEventListener("DOMContentLoaded", function() {
                     // Memantau perubahan pada input username
                     var usernameInput = document.getElementById("username");
@@ -100,6 +190,9 @@
                         content_p.style.marginLeft = '150px'; // Adjusted margin to match sidebar width
                     }
                 }
+
+
+                //modal
             </script>
 
             <?php echo form_close(); ?>
