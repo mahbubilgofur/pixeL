@@ -28,7 +28,7 @@
                                 <h5>Foto Anda</h5>
                             </div>
                         </div>
-                        <div class="mid-homes"><img src="<?= base_url('img/love.png') ?>" alt=""></div>
+                        <div class="mid-homes"><img src="<?= base_url('img/likesL.png') ?>" alt=""></div>
                         <div class="rc-homes">
                             <div class="t-kmn">
                                 <img src="<?= base_url('img/komen.png') ?>" alt="">
@@ -65,17 +65,29 @@
 
     </div>
     <div class="content-album-fotos">
-        <?php foreach ($fotos as $foto) : ?>
-            <?php if ($foto->jumlah_like > 0) : ?>
+        <?php
+        // Fungsi untuk membandingkan jumlah like antara dua foto
+        function compareLike($a, $b)
+        {
+            if ($a->jumlah_like == $b->jumlah_like) {
+                return 0;
+            }
+            return ($a->jumlah_like > $b->jumlah_like) ? -1 : 1;
+        }
+
+        // Urutkan array $fotos berdasarkan jumlah like
+        usort($fotos, 'compareLike');
+
+        // Tampilkan foto-foto yang sudah diurutkan
+        foreach ($fotos as $foto) :
+            if ($foto->jumlah_like > 0) :
+        ?>
                 <div class="foto-cont">
                     <div class="top-cont">
                         <?php
-
                         $id_user_login = $this->session->userdata('id_user');
                         $target_url = ($id_user_login && $foto->id_user == $id_user_login) ? base_url('home/profil_foto/' . $foto->id_user) : base_url('home/profil_users/' . $foto->id_user);
                         ?>
-
-
                         <a href="<?= $target_url ?>">
                             <img src="<?php echo base_url('users/' . $foto->profil); ?>" alt="">
                             <p><?php echo $foto->username ?></p>
@@ -89,8 +101,11 @@
                     </div>
                     <div class="bottom-cont"></div>
                 </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
+        <?php
+            endif;
+        endforeach;
+        ?>
+
 
     </div>
     <a href="<?= base_url('home/tentang') ?>">

@@ -26,13 +26,13 @@
                             <div class="b-b-b">
                                 <?php if ($role_id == 1 || $role_id == 2) : ?>
                                     <?php if ($like[$photo['id_foto']]) : ?>
-                                        <a href="<?= base_url('home/remove_like1/' . $photo['id_foto']); ?>"><img src="<?= base_url('img/love.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?></a>
+                                        <a href="<?= base_url('home/remove_like1/' . $photo['id_foto']); ?>"><img src="<?= base_url('img/likesL.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?></a>
                                     <?php else : ?>
-                                        <a href="<?= base_url('home/add_like1/' . $photo['id_foto']); ?>">🤍<?= $likes[$photo['id_foto']]; ?></a>
+                                        <a href="<?= base_url('home/add_like1/' . $photo['id_foto']); ?>"> <img src="<?= base_url('img/putihL.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?></a>
                                     <?php endif; ?>
                                 <?php else : ?>
-                                    <a href="<?= base_url('login') ?>">
-                                        🤍<?= $likes[$photo['id_foto']]; ?>
+                                    <a href=" <?= base_url('login') ?>">
+                                        <img src="<?= base_url('img/putihL.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?>
                                     </a>
                                 <?php endif; ?>
                                 <a class="openModal" data-photo-id="<?= $photo['id_foto']; ?>">

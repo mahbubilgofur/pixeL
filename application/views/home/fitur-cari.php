@@ -24,9 +24,9 @@
                             <div class="b-b-b">
                                 <?php if ($role_id == 1 || $role_id == 2) : ?>
                                     <?php if ($like[$photo['id_foto']]) : ?>
-                                        <a href="<?= base_url('home/remove_like1/' . $photo['id_foto']); ?>"><img src="<?= base_url('img/love.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?></a>
+                                        <a href="<?= base_url('home/remove_like2/' . $photo['id_foto']); ?>"><img src="<?= base_url('img/love.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?></a>
                                     <?php else : ?>
-                                        <a href="<?= base_url('home/add_like1/' . $photo['id_foto']); ?>">🤍<?= $likes[$photo['id_foto']]; ?></a>
+                                        <a href="<?= base_url('home/add_like2/' . $photo['id_foto']); ?>">🤍<?= $likes[$photo['id_foto']]; ?></a>
                                     <?php endif; ?>
                                 <?php else : ?>
                                     <a href="<?= base_url('login') ?>">
@@ -66,7 +66,7 @@
                                                         <p><?= $komentar['tgl_komentar'] ?></p>
                                                         <?php if ($komentar['id_user'] == $this->session->userdata('id_user')) : ?>
                                                             <?php if ($role_id == 1 || $role_id == 2) : ?>
-                                                                <a href="<?= base_url('home/hapus_foto/' . $komentar['id_komen']) ?>"><img src="<?= base_url('img/delete.png') ?>" alt=""></a>
+                                                                <a href="<?= base_url('home/hapus_foto_cari/' . $komentar['id_komen']) ?>"><img src="<?= base_url('img/delete.png') ?>" alt=""></a>
                                                             <?php endif; ?>
                                                         <?php endif; ?>
                                                     </div>
@@ -78,9 +78,9 @@
                                                 <div class="top-likes">
                                                     <?php if ($role_id == 1 || $role_id == 2) : ?>
                                                         <?php if ($like[$photo['id_foto']]) : ?>
-                                                            <a href="<?= base_url('home/remove_like1/' . $photo['id_foto']); ?>"><img src="<?= base_url('img/love.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?></a>
+                                                            <a href="<?= base_url('home/remove_like2/' . $photo['id_foto']); ?>"><img src="<?= base_url('img/love.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?></a>
                                                         <?php else : ?>
-                                                            <a href="<?= base_url('home/add_like1/' . $photo['id_foto']); ?>">🤍<?= $likes[$photo['id_foto']]; ?></a>
+                                                            <a href="<?= base_url('home/add_like2/' . $photo['id_foto']); ?>">🤍<?= $likes[$photo['id_foto']]; ?></a>
                                                         <?php endif; ?>
                                                     <?php else : ?>
                                                         <a href="<?= base_url('login') ?>">
@@ -93,7 +93,7 @@
                                                 <p><?= $photo['tgl_unggah'] ?></p>
                                             </div>
                                             <div class="bwh-mdls-1">
-                                                <form action="<?= base_url('home/add_komentar_foto') ?>" method="post">
+                                                <form action="<?= base_url('home/add_komentar_foto_cari') ?>" method="post">
                                                     <div class="bottom-m">
                                                         <input type="hidden" name="id_foto" value="<?= $photo['id_foto'] ?>">
                                                         <input type="text" name="isi_komentar" id="" placeholder="  Komentar.....">

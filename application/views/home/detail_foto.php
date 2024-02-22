@@ -45,13 +45,13 @@
                         <!-- Tampilan untuk Tombol Like -->
                         <?php if ($role_id == 1 || $role_id == 2) : ?>
                             <?php if ($is_liked) : ?>
-                                <a href="<?= base_url('home/remove_like/' . $fotos['id_foto']); ?>"><img src="<?= base_url('img/love.png') ?>" alt=""></a>
+                                <a href="<?= base_url('home/remove_like/' . $fotos['id_foto']); ?>"><img src="<?= base_url('img/likesL.png') ?>" alt=""></a>
                             <?php else : ?>
-                                <a href="<?= base_url('home/add_like/' . $fotos['id_foto']); ?>">🤍</a>
+                                <a href="<?= base_url('home/add_like/' . $fotos['id_foto']); ?>"><img src="<?= base_url('img/putihL.png') ?>" alt=""></a>
                             <?php endif; ?>
                         <?php else : ?>
                             <a href="<?= base_url('login') ?>">
-                                <p>🤍</p>
+                                <p><?= base_url('img/putihL.png') ?></p>
                             </a>
                         <?php endif; ?>
                         <p>2002-22-2</p>

@@ -184,7 +184,6 @@ class Home extends CI_Controller
     }
 
 
-
     public function detail_foto($id_foto)
     {
 
@@ -734,17 +733,18 @@ class Home extends CI_Controller
     {
 
         $DATA['data_user'] = $this->M_user->getuser();
-
         $DATA['likes'] = array();
         $DATA['jumlah_view'] = array();
-        $DATA['is_liked1'] = array();
+        $DATA['is_liked2'] = array();
         $DATA['role_id'] = $this->session->userdata('role_id');
         $DATA['fotos'] = array();
         $DATA['profils'] = array();
         $DATA['komentars'] = array();
         $search_term = $this->input->get('search');
+        $this->session->set_userdata('search_term', $search_term); // Menyimpan data pencarian ke dalam sesi
         $keywords = explode(' ', $search_term);
         $DATA['photos'] = $this->M_foto->searchFoto($keywords);
+
 
         foreach ($DATA['photos'] as $photo) {
             $jumlah_like = $this->M_like->hitungjumlahlike($photo['id_foto']);
@@ -760,7 +760,7 @@ class Home extends CI_Controller
             $fotos = $this->M_like->getFotoById($photo['id_foto']);
             $DATA['fotos'][$photo['id_foto']] = $fotos;
 
-            $like = $this->is_liked1($photo['id_foto']);
+            $like = $this->is_liked2($photo['id_foto']);
             $DATA['photos'] = $this->M_foto->searchFoto($keywords);
             $DATA['like'][$photo['id_foto']] = $like;
 
@@ -771,8 +771,130 @@ class Home extends CI_Controller
             $DATA['komentars'][$photo['id_foto']] = $komentars;
         }
 
-
         $this->load->view('home/header', $DATA);
         $this->load->view('home/fitur-cari', $DATA);
+    }
+    public function add_like2($id_foto)
+    {
+        // Lakukan verifikasi role_id atau kondisi lain yang diperlukan
+        $role_id = $this->session->userdata('role_id');
+        if ($role_id != 1 && $role_id != 2) {
+            // Tambahkan logika atau tindakan lain jika role_id tidak memenuhi syarat
+            redirect('login'); // Ganti dengan URL yang sesuai
+            return;
+        }
+
+        // Lakukan penambahan like
+        $id_user = $this->session->userdata('id_user'); // Sesuaikan dengan cara Anda mengelola sesi login
+        $this->M_like->add_like($id_foto, $id_user);
+
+        // Mendapatkan data pencarian sebelumnya dari session
+        $search_term = $this->session->userdata('search_term');
+
+        // Jika tidak ada data pencarian sebelumnya, kosongkan saja
+        if (!$search_term) {
+            $search_term = '';
+        }
+
+        $keywords = explode(' ', $search_term);
+        $DATA['photos'] = $this->M_foto->searchFoto($keywords);
+
+        // Redirect ke halaman pencarian dengan kata kunci yang sesuai
+        redirect('home/fitur_cari?search=' . urlencode($search_term));
+    }
+
+    public function remove_like2($id_foto)
+    {
+        // Lakukan verifikasi role_id atau kondisi lain yang diperlukan
+        $role_id = $this->session->userdata('role_id');
+        if ($role_id != 1 && $role_id != 2) {
+            // Tambahkan logika atau tindakan lain jika role_id tidak memenuhi syarat
+            redirect('login'); // Ganti dengan URL yang sesuai
+            return;
+        }
+
+        // Lakukan penghapusan like
+        $id_user = $this->session->userdata('id_user'); // Sesuaikan dengan cara Anda mengelola sesi login
+        $this->M_like->remove_like($id_foto, $id_user);
+
+        // Redirect kembali ke halaman foto dengan id_album yang sesuai
+        $id_album = $this->M_foto->getAlbumIdByPhotoId($id_foto); // Mendapatkan id_album dari id_foto
+        $search_term = $this->session->userdata('search_term'); // Mengambil data pencarian sebelumnya dari session
+        $keywords = explode(' ', $search_term);
+        $DATA['photos'] = $this->M_foto->searchFoto($keywords);
+
+        // Redirect ke halaman pencarian dengan kata kunci yang sesuai
+        redirect('home/fitur_cari?search=' . urlencode($search_term));
+    }
+
+    public function hapus_foto_cari($id_komen)
+    {
+        // Dapatkan id_foto sebelum menghapus komentar
+        $id_foto = $this->M_komentar->get_id_foto($id_komen);
+
+        // Hapus komentar
+        $this->M_komentar->hapus_komen($id_komen);
+        // Redirect kembali ke halaman foto dengan id_album yang sesuai
+        $id_album = $this->M_foto->getAlbumIdByPhotoId($id_foto); // Mendapatkan id_album dari id_foto
+        $search_term = $this->session->userdata('search_term'); // Mengambil data pencarian sebelumnya dari session
+        $keywords = explode(' ', $search_term);
+        $DATA['photos'] = $this->M_foto->searchFoto($keywords);
+
+
+        if ($id_album) {
+            redirect('home/fitur_cari?search=' . urlencode($search_term));
+        } else {
+            redirect('home/fitur_cari?search=' . urlencode($search_term));
+        }
+    }
+    public function add_komentar_foto_cari()
+    {
+        $role_id = $this->session->userdata('role_id');
+        if ($role_id != 1 && $role_id != 2) {
+            // Tambahkan logika atau tindakan lain jika role_id tidak memenuhi syarat
+            redirect('login'); // Ganti dengan URL yang sesuai
+            return;
+        }
+
+        $id_user = $this->session->userdata('id_user');
+        $isi_komentar = $this->input->post('isi_komentar');
+        $tgl_komentar = date('Y-m-d H:i:s');
+        $id_foto = $this->input->post('id_foto'); // Ambil id_foto dari formulir
+        $id_album = $this->M_foto->getAlbumIdByPhotoId($id_foto);
+
+        // Memastikan isi_komentar tidak kosong
+        if (empty($isi_komentar)) {
+            $id_album = $this->M_foto->getAlbumIdByPhotoId($id_foto); // Mendapatkan id_album dari id_foto
+            $search_term = $this->session->userdata('search_term'); // Mengambil data pencarian sebelumnya dari session
+            $keywords = explode(' ', $search_term);
+            $DATA['photos'] = $this->M_foto->searchFoto($keywords);
+
+            // Redirect ke halaman pencarian dengan kata kunci yang sesuai
+            redirect('home/fitur_cari?search=' . urlencode($search_term));
+        }
+
+        $data = array(
+            'id_foto' => $id_foto,
+            'id_user' => $id_user,
+            'isi_komentar' => $isi_komentar,
+            'tgl_komentar' => $tgl_komentar
+        );
+
+        $this->M_komentar->add_komentar($data);
+
+
+        $id_album = $this->M_foto->getAlbumIdByPhotoId($id_foto); // Mendapatkan id_album dari id_foto
+        $search_term = $this->session->userdata('search_term'); // Mengambil data pencarian sebelumnya dari session
+        $keywords = explode(' ', $search_term);
+        $DATA['photos'] = $this->M_foto->searchFoto($keywords);
+
+        // Redirect ke halaman pencarian dengan kata kunci yang sesuai
+        redirect('home/fitur_cari?search=' . urlencode($search_term));
+    }
+
+    private function is_liked2($id_foto)
+    {
+        $id_user = $this->session->userdata('id_user'); // Sesuaikan dengan cara Anda mengelola sesi login
+        return $this->M_like->isLiked($id_foto, $id_user);
     }
 }

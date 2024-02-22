@@ -21,7 +21,7 @@
                 <form action="<?= base_url('home/fitur_cari') ?>" method="get">
                     <div class="cari">
                         <input type="text" name="search" placeholder="Temukan judul foto......">
-                        <div class="cari-usr" type="submit"><img src="<?= base_url('img/search.png  ') ?>" alt=""></div>
+                        <div class="cari-usr" type="submit"><img src="<?= base_url('img/search.png ') ?>" alt=""></div>
                         <style>
                             /* Efek hover saat cursor di atas input */
                             input[type="text"]:hover {
