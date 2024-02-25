@@ -20,7 +20,7 @@
             <a href="<?= base_url('user') ?>" class="<?= ($this->uri->segment(1) == 'user') ? 'active' : '' ?>">User</a>
             <a href="<?= base_url('komentar') ?>" class="<?= ($this->uri->segment(1) == 'komentar') ? 'active' : '' ?>">Komentar</a>
             <a href="<?= base_url('like') ?>" class="<?= ($this->uri->segment(1) == 'like') ? 'active' : '' ?>">Like</a>
-            <a href="<?= base_url('login/logout') ?>">Logout</a>
+            <a href="<?= base_url('login/logout') ?>" style="color: red;">Logout</a>
         </div>
 
         <!-- Toggle Button -->

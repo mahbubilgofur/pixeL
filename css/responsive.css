@@ -1981,7 +1981,7 @@
 		align-items: start;
 		width: 90%;
 		height: 50%;
-		font-size: 13px;
+		font-size: 16px;
 	}
 	.logo {
 		width: 30%;
@@ -2100,9 +2100,11 @@
 		justify-content: center;
 		width: 20%;
 		height: 100%;
+		cursor: pointer;
 	}
 	.left-profil img {
 		width: 20px;
+		cursor: pointer;
 		height: 20px;
 		border-radius: 100%;
 	}
@@ -2112,8 +2114,10 @@
 		justify-content: start;
 		width: 80%;
 		height: 100%;
+		cursor: pointer;
 	}
 	.right-profil p {
+		cursor: pointer;
 		font-size: 15px;
 		color: #ffffff;
 	}
@@ -2126,8 +2130,8 @@
 		align-items: center;
 	}
 	.t-t img {
-		width: 80%;
-		height: 80%;
+		width: 100px;
+		height: 100px;
 		object-fit: cover;
 	}
 	.b-b {

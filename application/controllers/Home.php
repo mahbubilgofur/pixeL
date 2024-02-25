@@ -332,7 +332,7 @@ class Home extends CI_Controller
         $id_user = $this->session->userdata('id_user'); // Sesuaikan dengan cara Anda mengelola sesi login
         $this->M_like->add_like($id_foto, $id_user);
 
-        // Redirect kembali ke halaman foto atau halaman lain yang sesuai
+        // Redirect kembali ke halaman foto atau halaman lain    yang sesuai
         redirect('home/detail_foto/' . $id_foto);
     }
 
@@ -362,21 +362,64 @@ class Home extends CI_Controller
 
     public function upload_foto()
     {
-        // Check if the user is logged in
         if (!$this->session->userdata('role_id')) {
-            // Redirect to the login page or handle the case if the user is not logged in
             redirect('login');
         }
 
-        // Get the id_user from the session
         $id_user = $this->session->userdata('id_user');
 
-        // Fetch albums with joined foto data for the view based on id_user
         $data['data_album'] = $this->M_foto->getAlbumsdanId_user();
 
         $this->load->view('home/header');
         $this->load->view('home/upload_foto', $data);
     }
+
+    public function add_foto()
+    {
+        if ($this->input->post()) {
+            if (!$this->session->userdata('role_id')) {
+                redirect('login');
+            }
+
+            $config['upload_path'] = './fotos/';
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['max_size'] = 1024;
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('lokasi_file')) {
+                $upload_data = $this->upload->data();
+
+                // Get id_user from session
+                $id_user = $this->session->userdata('id_user');
+
+                $data = array(
+                    'judul_foto' => $this->input->post('judul_foto'),
+                    'deskripsi_foto' => $this->input->post('deskripsi_foto'),
+                    'tgl_unggah' => date('Y-m-d H:i:s'),
+                    'lokasi_file' => $upload_data['file_name'],
+                    'id_album' => $this->input->post('id_album'),
+                    'id_user' => $id_user, // Set id_user from session
+                );
+                $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
+                $this->M_foto->insertFoto($data);
+
+                redirect('home/upload_foto');
+            } else {
+                // $error = array('error' => $this->upload->display_errors());
+                // $data['albums'] = $this->M_album->getAlbums();
+                // $this->load->view('home/header');
+                // $this->load->view('home/upload_album', $error);
+                $this->session->set_flashdata('error', 'Gagal mengunggah gambar: ' . $this->upload->display_errors());
+                redirect('home/upload_foto');
+            }
+        } else {
+            $data['albums'] = $this->M_album->getAlbums(); // Fetch albums for the view
+            $this->load->view('home/header');
+            $this->load->view('home/upload_foto', $data);
+        }
+    }
+
 
 
     public function add_album()
@@ -437,51 +480,6 @@ class Home extends CI_Controller
             // Load views
             $this->load->view('home/header');
             $this->load->view('home/upload_album');
-        }
-    }
-
-
-    public function add_foto()
-    {
-        if ($this->input->post()) {
-            if (!$this->session->userdata('role_id')) {
-                redirect('login');
-            }
-
-            $config['upload_path'] = './fotos/';
-            $config['allowed_types'] = 'jpg|jpeg|png';
-            $config['max_size'] = 1024;
-
-            $this->load->library('upload', $config);
-
-            if ($this->upload->do_upload('lokasi_file')) {
-                $upload_data = $this->upload->data();
-
-                // Get id_user from session
-                $id_user = $this->session->userdata('id_user');
-
-                $data = array(
-                    'judul_foto' => $this->input->post('judul_foto'),
-                    'deskripsi_foto' => $this->input->post('deskripsi_foto'),
-                    'tgl_unggah' => date('Y-m-d H:i:s'),
-                    'lokasi_file' => $upload_data['file_name'],
-                    'id_album' => $this->input->post('id_album'),
-                    'id_user' => $id_user, // Set id_user from session
-                );
-
-                $this->M_foto->insertFoto($data);
-
-                redirect('home'); // Redirect or show success message
-            } else {
-                $error = array('error' => $this->upload->display_errors());
-                $data['albums'] = $this->M_album->getAlbums(); // Fetch albums for the view
-                $this->load->view('home/header');
-                $this->load->view('home/upload_album', $error);
-            }
-        } else {
-            $data['albums'] = $this->M_album->getAlbums(); // Fetch albums for the view
-            $this->load->view('home/header');
-            $this->load->view('home/upload_album', $data);
         }
     }
 
@@ -659,19 +657,14 @@ class Home extends CI_Controller
 
     public function delete_foto($id)
     {
-        // Logic for deleting foto
         $this->M_foto->deleteFoto($id);
 
-        // Redirect or show success message
         redirect('home/edit_foto/' . $id);
     }
     public function update_fotos($id)
     {
-        // Form submission logic for updating foto
         if ($this->input->post()) {
-            // Check if a new file is uploaded
             if (!empty($_FILES['lokasi_file']['name'])) {
-                // Konfigurasi upload gambar
                 $config['upload_path'] = './fotos/'; // Sesuaikan dengan folder tempat menyimpan gambar
                 $config['allowed_types'] = 'jpg|jpeg|png';
                 $config['max_size'] = 1024;  // Maksimal 1 MB
@@ -679,7 +672,6 @@ class Home extends CI_Controller
                 $this->load->library('upload', $config);
 
                 if ($this->upload->do_upload('lokasi_file')) {
-                    // If upload is successful, update with new file
                     $upload_data = $this->upload->data();
                     $data = array(
                         'judul_foto' => $this->input->post('judul_foto'),
@@ -690,20 +682,16 @@ class Home extends CI_Controller
 
                     $this->M_foto->updateFoto($id, $data);
 
-                    // Delete the old file if needed, uncomment the line below if you want to delete the old file
-                    // unlink('./fotos/' . $this->input->post('old_lokasi_file'));
-
-                    // Redirect or show success message
-                    redirect('home/edit_foto');
+                    $data['foto'] = $this->M_foto->getFotoById($id);
+                    $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
+                    redirect('home/edit_fotos/' . $id);
                 } else {
                     // Jika upload gagal, tampilkan pesan error
-                    $error = array('error' => $this->upload->display_errors());
                     $data['foto'] = $this->M_foto->getFotoById($id);
-                    $this->load->view('home/header');
-                    $this->load->view('home/content-edit-profil_foto', $data, $error);
+                    $this->session->set_flashdata('error', 'Gagal mengunggah gambar: ' . $this->upload->display_errors());
+                    redirect('home/edit_fotos/' . $id);
                 }
             } else {
-                // If no new file is uploaded, update without changing the file
                 $data = array(
                     'judul_foto' => $this->input->post('judul_foto'),
                     'deskripsi_foto' => $this->input->post('deskripsi_foto'),
@@ -712,15 +700,14 @@ class Home extends CI_Controller
 
                 $this->M_foto->updateFoto($id, $data);
 
-                // Redirect or show success message
-                redirect('home/edit_foto');
+                $data['foto'] = $this->M_foto->getFotoById($id);
+                $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
+                redirect('home/edit_fotos/' . $id);
             }
         } else {
-            // Load the edit view if no form submission
             $data['foto'] = $this->M_foto->getFotoById($id);
 
             if (!$data['foto']) {
-                // Handle if foto is not found
                 show_404();
             }
 

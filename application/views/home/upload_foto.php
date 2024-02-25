@@ -52,10 +52,12 @@
         width: 100%;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         color: white;
     }
 
     p {
+        margin-bottom: 10px;
         font-size: 13px;
         color: #00fbff;
     }
@@ -145,14 +147,66 @@
         transition: all 0.9s;
         color: black;
     }
+
+    .alertt {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 200px;
+        height: 60px;
+        border-radius: 10px;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: none;
+    }
+
+    .alert-danger {
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: red;
+        font-size: 15px;
+        color: white;
+    }
+
+    .alert-success {
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: green;
+        color: white;
+    }
 </style>
 <div class="upload_alb">
+    <?php if (validation_errors()) : ?>
+        <div class="alertt alert-danger">
+            <?php echo validation_errors(); ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- Menampilkan pesan kesalahan dari flashdata jika ada -->
+    <?php if ($this->session->flashdata('error')) : ?>
+        <div class="alertt alert-danger">
+            <?php echo $this->session->flashdata('error'); ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- Menampilkan pesan sukses dari flashdata jika ada -->
+    <?php if ($this->session->flashdata('success')) : ?>
+        <div class="alertt alert-success">
+            <?php echo $this->session->flashdata('success'); ?>
+        </div>
+    <?php endif; ?>
     <div class="upload_alb-b">
-        <?php echo validation_errors(); ?>
         <?php echo form_open_multipart('home/add_foto'); ?>
         <div class="upload_albb">
             <label for="judul_foto">Nama Foto:</label>
-            <input type="text" name="judul_foto" class="form-input" placeholder=" Isi Nama Foto" />
+            <input type="text" name="judul_foto" class="form-input" placeholder=" Isi Nama Foto" required>
             <label for="id_labum">Pilih Nama Foto :</label>
             <select name="id_album" class="form-input" required>
                 <?php foreach ($data_album as $album) : ?>
@@ -167,7 +221,7 @@
             <label for="lokasi_file">Upload Foto:</label>
             <div class="type">
                 <input type="file" name="lokasi_file" class="form-inputfile" required />
-                <p>Maksimal Ukuran 1 MB</p>
+                <p>Format harus jpg|jpeg|png,Maksimal Ukuran 1 MB</p>
             </div>
             <div class="atr">
                 <a href="javascript:void(0);" onclick="kembali();">
@@ -184,6 +238,26 @@
         <?php echo form_close(); ?>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var flashMessages = document.querySelectorAll('.alertt');
+
+        flashMessages.forEach(function(message) {
+            message.style.display = 'flex';
+
+            setTimeout(function() {
+                message.style.display = 'none';
+            }, 5000);
+
+            var closeButton = message.querySelector('.close');
+            if (closeButton) {
+                closeButton.addEventListener('click', function() {
+                    message.style.display = 'none';
+                });
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

@@ -13,8 +13,15 @@
                 <div class="bottom-content">
                     <div class="top-c">
                         <div class="top-cc">
-                            <img src="<?php echo base_url('users/' . $profils['profil']); ?>" alt="Profil Image">
-                            <p><?= $profils['username'] ?></p>
+                            <?php
+                            $id_user_login = $this->session->userdata('id_user');
+                            $target_url = ($id_user_login && $foto->id_user == $id_user_login) ? base_url('home/profil_foto/' . $foto->id_user) : base_url('home/profil_users/' . $foto->id_user);
+                            ?>
+                            <a href="<?= $target_url ?>">
+                                <img src="<?php echo base_url('users/' . $profils['profil']); ?>" alt="Profil Image">
+                                <p><?= $profils['username'] ?></p>
+                            </a>
+
                         </div>
                         <div class="top-ccc">
                             <p><?php echo $foto->deskripsi_foto; ?></p>
@@ -69,5 +76,6 @@
 
 
 </body>
+
 
 </html>

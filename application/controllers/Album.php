@@ -31,7 +31,6 @@
             // Load view
             $this->load->view('admin/sidebar');
             $this->load->view('album/content', $data);
-            $this->load->view('admin/footer');
         }
 
         public function add()

@@ -33,7 +33,6 @@ class Foto extends CI_Controller
         // Load view
         $this->load->view('admin/sidebar');
         $this->load->view('foto/content', $data);
-        $this->load->view('admin/footer');
     }
 
     public function add()

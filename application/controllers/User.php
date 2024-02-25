@@ -28,7 +28,6 @@ class User extends CI_Controller
 
         $this->load->view('admin/sidebar');
         $this->load->view('user/content', $DATA);
-        $this->load->view('admin/footer');
     }
 
     public function add()

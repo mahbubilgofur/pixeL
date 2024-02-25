@@ -32,6 +32,7 @@ body {
 	width: 40px;
 	border-radius: 20px;
 	height: 40px;
+	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -41,6 +42,7 @@ body {
 }
 .kembali-detail {
 	font-size: 25px;
+	cursor: pointer;
 	position: fixed;
 	top: 70px;
 	left: 10px;
@@ -649,6 +651,7 @@ header {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-direction: column;
 	color: white;
 	z-index: 10000;
 	position: absolute;
@@ -886,8 +889,22 @@ a,
 	display: flex;
 	align-items: center;
 	justify-content: start;
+	cursor: pointer;
+}
+.top-cc a {
+	display: flex;
+	align-items: center;
+	justify-content: start;
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+}
+.top-cc p {
+	cursor: pointer;
 }
 .top-cc img {
+	cursor: pointer;
+
 	width: 24px;
 	height: 24px;
 	border-radius: 100%;
@@ -962,6 +979,7 @@ a,
 	height: 20%;
 	margin-top: 10px;
 }
+
 .komen-user1 h4 {
 	margin-left: 5px;
 }
@@ -1302,19 +1320,13 @@ halamanprofilfoto */
 	flex-direction: column;
 	border: 1px solid rgba(0, 0, 0, 0.357);
 }
-.foto-profil-p:hover {
-	margin: 10px;
-	width: 190px;
-	height: 190px;
-	background-color: rgba(0, 0, 0, 0.063);
-	border-radius: 10px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	border: 4px solid rgba(0, 0, 0, 0.267);
-}
 .foto-profil-p img {
+	width: 100%;
+	border-radius: 10px;
+	height: 100%;
+	object-fit: fill; /* Menjaga aspek rasio gambar tanpa distorsi */
+}
+.foto-profil-p img:hover {
 	width: 100%;
 	border-radius: 10px;
 	height: 100%;
@@ -1754,19 +1766,13 @@ profil user */
 	border: 1px solid rgba(0, 0, 0, 0.448);
 }
 
-.bottom-p :hover {
-	transition: all 0.3s;
-	margin: 10px;
-	width: 190px;
-	height: 190px;
-	background-color: rgba(0, 0, 0, 0.063);
-	border-radius: 10px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
 .bottom-p img {
+	border-radius: 10px;
+	width: 90%;
+	height: 90%;
+	object-fit: fill;
+}
+.bottom-p img:hover {
 	border-radius: 10px;
 	width: 90%;
 	height: 90%;
@@ -1910,11 +1916,20 @@ fooyter */
 	height: 10%;
 	background-color: white;
 }
+.top-mdls a {
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	cursor: pointer;
+	text-decoration: none;
+}
 .top-mdls p {
+	cursor: pointer;
 	margin-left: 10px;
 }
 .top-mdls img {
 	width: 40px;
+	cursor: pointer;
 	height: 40px;
 	border-radius: 100%;
 }

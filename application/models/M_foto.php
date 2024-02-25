@@ -5,7 +5,7 @@ class M_foto extends CI_Model
 {
     public function getFotos()
     {
-        // Ambil data foto dari database
+        $this->db->order_by('tgl_unggah', 'desc');
         return $this->db->get('tbl_foto')->result();
     }
 
@@ -104,10 +104,8 @@ class M_foto extends CI_Model
     }
     public function getAlbumsdanId_user()
     {
-        // Fetch album data from the database based on id_user
-        $query = $this->db->get('tbl_album'); // Ganti 'your_album_table_name' dengan nama tabel yang sesuai
+        $query = $this->db->get('tbl_album');
 
-        // Check if there are records
         if ($query->num_rows() > 0) {
             return $query->result();
         } else {

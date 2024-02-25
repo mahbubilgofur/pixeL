@@ -51,15 +51,15 @@ class M_komentar extends CI_Model
         return $this->db->delete('tbl_komentar', array('id_komen' => $id));
     }
 
-    public function hapus_komen($id_komen)
-    {
-        $this->db->where('id_komen', $id_komen);
-        return $this->db->delete('tbl_komentar');
-    }
     public function hapus_komen_id_foto($id_komen)
     {
         $result = $this->db->select('id_foto')->get_where('tbl_komentar', array('id_komen' => $id_komen))->row();
         return $result ? $result->id_foto : null;
+    }
+    public function hapus_komen($id_komen)
+    {
+        $this->db->where('id_komen', $id_komen);
+        return $this->db->delete('tbl_komentar');
     }
 
     public function add_komentar($data)
@@ -67,17 +67,6 @@ class M_komentar extends CI_Model
         $this->db->insert('tbl_komentar', $data);
     }
 
-    // public function getCommentsByFotoId($id_foto)
-    // {
-    //     $this->db->select('tbl_komentar.*, tbl_user.username');
-    //     $this->db->from('tbl_komentar');
-    //     $this->db->join('tbl_user', 'tbl_komentar.id_user = tbl_user.id_user');
-    //     $this->db->where('tbl_komentar.id_foto', $id_foto);
-    //     $this->db->order_by('tbl_komentar.tgl_komentar', 'asc');
-
-    //     $query = $this->db->get();
-    //     return $query->result_array();
-    // }
     public function getCommentsByFotoId($id_foto)
     {
         $this->db->select('tbl_komentar.*, tbl_user.username, tbl_user.profil');

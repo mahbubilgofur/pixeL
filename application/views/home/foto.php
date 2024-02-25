@@ -4,11 +4,43 @@
         <?php if (empty($photos)) : ?>
             <p>Tidak Ada Foto Yang Di Upload</p>
         <?php else : ?>
+            <?php
+            // Hitung jumlah like untuk setiap foto
+            foreach ($photos as &$photo) {
+                // Pastikan $likes[$photo['id_foto']] berisi data yang dapat dihitung
+                if (isset($likes[$photo['id_foto']])) {
+                    // Anda dapat mengkonversi string ke integer jika perlu
+                    $photo['jumlah_like'] = (int)$likes[$photo['id_foto']];
+                } else {
+                    // Jika tidak ada data, jumlah like diatur menjadi 0
+                    $photo['jumlah_like'] = 0;
+                }
+            }
+
+            // Fungsi pembanding untuk mengurutkan berdasarkan jumlah like
+            function compareLikes($a, $b)
+            {
+                if ($a['jumlah_like'] == $b['jumlah_like']) {
+                    return 0;
+                }
+                return ($a['jumlah_like'] > $b['jumlah_like']) ? -1 : 1;
+            }
+
+            // Mengurutkan array $photos berdasarkan jumlah like
+            usort($photos, 'compareLikes');
+
+            // Sekarang $photos telah diurutkan berdasarkan jumlah like dari yang paling banyak ke yang paling sedikit
+            ?>
             <?php foreach ($photos as $photo) : ?>
                 <!-- Tombol untuk kembali -->
                 <div class="foto">
                     <div class="top-fotos">
-                        <a href="<?= base_url('home/profil_users/' . $photo['id_user']); ?>">
+                        <?php
+                        $id_user_login = $this->session->userdata('id_user');
+                        $target_url = ($id_user_login && $photo['id_user'] == $id_user_login) ? base_url('home/profil_foto/' . $photo['id_user']) : base_url('home/profil_users/' . $photo['id_user']);
+                        ?>
+                        <a href="<?= $target_url ?>">
+
                             <div class="left-profil">
                                 <img src="<?= base_url('users/' . $photo['profil']); ?>" alt="Profil Image">
                             </div>
@@ -50,11 +82,16 @@
                                 <div class="right-mdls">
                                     <div class="r-mdls">
                                         <div class="top-mdls">
-                                            <?php $profil = $this->M_foto->getUser_andid_foto($photo['id_foto']); ?>
-                                            <?php if ($profil) : ?>
-                                                <img src="<?= base_url('users/' . $profil['profil']); ?>" alt="Profil Image">
-                                                <p><?= $profil['username'] ?></p>
-                                            <?php endif; ?>
+                                            <?php
+                                            $id_user_login = $this->session->userdata('id_user');
+                                            $target_url = ($id_user_login && $photo['id_user'] == $id_user_login) ? base_url('home/profil_foto/' . $photo['id_user']) : base_url('home/profil_users/' . $photo['id_user']);
+                                            ?>
+                                            <?php if ($photo) : ?>
+                                                <a href="<?= $target_url ?>">
+                                                    <img src="<?= base_url('users/' . $photo['profil']); ?>" alt="Profil Image">
+                                                    <p><?= $photo['username'] ?></p>
+                                                <?php endif; ?>
+                                                </a>
                                         </div>
                                         <p><?= $photo['deskripsi_foto'] ?></p>
                                         <div class="mid-mdls">
@@ -83,13 +120,13 @@
                                                 <div class="top-likes">
                                                     <?php if ($role_id == 1 || $role_id == 2) : ?>
                                                         <?php if ($like[$photo['id_foto']]) : ?>
-                                                            <a href="<?= base_url('home/remove_like1/' . $photo['id_foto']); ?>"><img src="<?= base_url('img/love.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?></a>
+                                                            <a href="<?= base_url('home/remove_like1/' . $photo['id_foto']); ?>"><img src="<?= base_url('img/likesL.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?></a>
                                                         <?php else : ?>
-                                                            <a href="<?= base_url('home/add_like1/' . $photo['id_foto']); ?>">🤍<?= $likes[$photo['id_foto']]; ?></a>
+                                                            <a href="<?= base_url('home/add_like1/' . $photo['id_foto']); ?>"><img src="<?= base_url('img/putihL.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?></a>
                                                         <?php endif; ?>
                                                     <?php else : ?>
                                                         <a href="<?= base_url('login') ?>">
-                                                            🤍<?= $likes[$photo['id_foto']]; ?>
+                                                            <img src="<?= base_url('img/putihL.png') ?>" alt=""><?= $likes[$photo['id_foto']]; ?>
                                                         </a>
                                                     <?php endif; ?>
                                                 </div>

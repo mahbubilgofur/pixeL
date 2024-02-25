@@ -30,7 +30,6 @@ class Like extends CI_Controller
         // Load view
         $this->load->view('admin/sidebar');
         $this->load->view('like/content', $data);
-        $this->load->view('admin/footer');
     }
 
     public function add()

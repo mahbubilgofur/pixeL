@@ -6,6 +6,7 @@ class M_album extends CI_Model
     public function getAlbums()
     {
         // Ambil data album dari tabel, sesuaikan dengan struktur tabel di database Anda
+        $this->db->order_by('tgl_buat', 'desc');
         $query = $this->db->get('tbl_album');
         return $query->result();
     }

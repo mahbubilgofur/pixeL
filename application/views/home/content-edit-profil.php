@@ -14,28 +14,28 @@
         <button class="tblsid" onclick="tombolsidbar()">+</button>
     </div>
     <div class="content-profil-cnt">
+        <?php if (validation_errors()) : ?>
+            <div class="alert alert-danger">
+                <?php echo validation_errors(); ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Menampilkan pesan kesalahan dari flashdata jika ada -->
+        <?php if ($this->session->flashdata('error')) : ?>
+            <div class="alert alert-danger">
+                <?php echo $this->session->flashdata('error'); ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Menampilkan pesan sukses dari flashdata jika ada -->
+        <?php if ($this->session->flashdata('success')) : ?>
+            <div class="alert alert-success">
+                <?php echo $this->session->flashdata('success'); ?>
+            </div>
+        <?php endif; ?>
         <div class="cnt-profil-kanan">
             <div class="top-profil-cnt">
                 <p>Edit Profil</p>
-                <?php if (validation_errors()) : ?>
-                    <div class="alert alert-danger">
-                        <?php echo validation_errors(); ?>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Menampilkan pesan kesalahan dari flashdata jika ada -->
-                <?php if ($this->session->flashdata('error')) : ?>
-                    <div class="alert alert-danger">
-                        <?php echo $this->session->flashdata('error'); ?>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Menampilkan pesan sukses dari flashdata jika ada -->
-                <?php if ($this->session->flashdata('success')) : ?>
-                    <div class="alert alert-success">
-                        <?php echo $this->session->flashdata('success'); ?>
-                    </div>
-                <?php endif; ?>
             </div>
             <?php echo form_open_multipart('home/update/' . $user->id_user, 'class="user-form"'); ?>
             <div class="mid-profil-cnt">
@@ -86,29 +86,25 @@
                 .alert {
                     position: fixed;
                     top: 20px;
-                    /* Sesuaikan dengan jarak dari bagian atas layar */
                     right: 20px;
-                    /* Sesuaikan dengan jarak dari bagian kanan layar */
-                    width: 190px;
+                    width: 200px;
                     height: 60px;
                     border-radius: 10px;
-                    /* Sesuaikan lebar pesan flash */
                     z-index: 9999;
+                    font-size: 15px;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    /* Pastikan pesan flash muncul di atas elemen lain */
                     display: none;
-                    /* Sembunyikan pesan flash secara default */
                 }
 
                 .alert-danger {
                     padding: 10px;
                     display: flex;
+                    flex-direction: column;
                     justify-content: center;
                     align-items: center;
                     background-color: red;
-                    font-size: 15px;
                     color: white;
                 }
 
@@ -123,20 +119,15 @@
             </style>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    // Select all flash messages
                     var flashMessages = document.querySelectorAll('.alert');
 
-                    // Loop through each flash message
                     flashMessages.forEach(function(message) {
-                        // Show the message
                         message.style.display = 'flex';
 
-                        // Hide the message after 3 seconds
                         setTimeout(function() {
                             message.style.display = 'none';
                         }, 2000);
 
-                        // Add event listener to close button
                         var closeButton = message.querySelector('.close');
                         if (closeButton) {
                             closeButton.addEventListener('click', function() {
